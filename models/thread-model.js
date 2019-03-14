@@ -1,25 +1,29 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const UserModel = sequelize.define('user', {
+const ThreadModel = sequelize.define('thread', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  username: Sequelize.STRING,
-  email: {
+  slug: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  encryptedPassword: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  description: Sequelize.STRING,
-  avatar: Sequelize.STRING,
-  cover: Sequelize.STRING
+  postsCount: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
+  locked: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
 });
 
-module.exports = UserModel;
+module.exports = ThreadModel;

@@ -5,19 +5,13 @@ const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
-const mongoose     = require('mongoose');
 const passport     = require("passport");
 const history      = require('connect-history-api-fallback');
 const cors         = require('cors');
+const sequelize    = require('./util/database');
 
 require('dotenv').config();
 
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-});
 
 const app = express();
 
@@ -62,6 +56,17 @@ app.use('/api', authRoutes);
 const userRoutes = require('./routes/user-routes');
 app.use('/api/u/', userRoutes);
 
+const threadRoutes = require('./routes/thread-routes');
+app.use('/api/v1/threads', threadRoutes);
+
+const categoryRoutes = require('./routes/category-routes');
+app.use('/api/v1/category', categoryRoutes);
+
+const postRoutes = require('./routes/post-routes');
+app.use('/api/v1/', postRoutes);
+
+
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -80,5 +85,16 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// sync all defined models to db - "creating the appropriate tables"  (must add this)
+sequelize
+  // force: true - only when I need to overwrite my tables
+  // .sync({ force: true }) 
+  .sync()
+  .then(result => {
+    // return User.findByPk(1);
+    // console.log(result)
+  })
+  .catch(err => console.log(err));
 
 module.exports = app;

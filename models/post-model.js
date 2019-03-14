@@ -1,25 +1,28 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const UserModel = sequelize.define('user', {
+const PostModel = sequelize.define('post', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  username: Sequelize.STRING,
-  email: {
+  content: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  name: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  encryptedPassword: {
-    type: Sequelize.STRING,
-    allowNull: false
+  replyingToUsername: {
+    type: Sequelize.STRING
   },
-  description: Sequelize.STRING,
-  avatar: Sequelize.STRING,
-  cover: Sequelize.STRING
+  removed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
 });
 
-module.exports = UserModel;
+module.exports = PostModel;

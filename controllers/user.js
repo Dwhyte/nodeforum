@@ -63,8 +63,10 @@ exports.upload = {
 }
 
 
-// @desc    Post - update user avatar image
-// @access  Private
+// @route   POST api/u/update/avatar
+// @desc    Add/Update user avatar image
+// @access  Private 
+// (protected Route)
 exports.updateUserAvatar = (req, res) => {
   console.log(req.file) // see what is in file upload
   const image = {};
@@ -100,8 +102,11 @@ exports.updateUserAvatar = (req, res) => {
 };
 
 
-// @desc    Post - update user cover image
-// @access  Private
+
+// @route   POST api/u/update/cover
+// @desc    Add/Update user cover image
+// @access  Private 
+// (protected Route)
 exports.updateUserCover = (req, res) => {
   console.log(req.file) // see what is in file upload
   const image = {};
@@ -159,6 +164,11 @@ exports.updateUserDescription = (req, res) => {
 };
 
 
+
+// @route   POST api/u/update/passreset
+// @desc    Reset user's password
+// @access  Private 
+// (protected Route)
 exports.updateUserPassword = (req, res) => {
   const newPassword = req.body.password;
   const salt = bcrypt.genSaltSync(10);

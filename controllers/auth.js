@@ -25,63 +25,29 @@ exports.getRegister = (req, res) => {
 
   // otherwise check to see if the submitted email is taken.
   UserModel.findOne({
-      email: req.body.email
-    },
-    (err, userFromDb) => {
-
-      if (err) {
-        res.status(500).json({
-          success: false,
-          msg: "Registration Error"
-        });
-        return;
-      }
-      // If the email is not taken, the "userFromDb" variable will empty.
-      if (userFromDb) {
-        errors.email = 'Email already exists';
-        res.status(400).json(errors);
-        return;
-      }
-      // If we get here, we are ready to save the new user in the DB.
+    where: { email: req.body.email }
+  })
+  .then(user => {
+    if(user) {
+      errors.email = 'Email already exists';
+      res.status(400).json(errors);
+      return;
+    } else {
       const salt = bcrypt.genSaltSync(10);
       const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
 
-      // const avatar = gravatar.url(req.body.email, {
-      //   s: '200', // Size
-      //   r: 'pg', // Rating
-      //   d: 'mm' // Default
-      // });
-
-      const theUser = new UserModel({
+      UserModel.create({
         username: req.body.username,
         email: req.body.email,
         encryptedPassword: scrambledPassword,
-        // avatar,
       });
 
-
-
-      theUser.save((err) => {
-        if (err) {
-          res.status(500).json({
-            success: false,
-            message: 'System not created an account.',
-            error: err
-          });
-          return;
-        }
-        // Clear the encryptedPassword before sending
-        // (not from the database, just from the object)
-        theUser.encryptedPassword = undefined;
-
-        // Send the user's information to the frontend
-        res.status(200).json(theUser);
-
-      }); // close theUser.save()
+      res.status(200).json(user)
+      console.log(user);
     }
-  )
-
-}
+  })
+  .catch(err => res.json({success: false, err}));
+};
 
 
 // @route   GET api/users/login
@@ -98,20 +64,13 @@ exports.getLogin = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-
-  UserModel.findOne({
-      email: email
-    },
-    (err, userFromDb) => {
-      if (err) {
-        next(err);
-        return res.status(500).json(err);
-      }
-
+  UserModel.findOne({ email: email })
+    .then(userFromDb => {
       if (!userFromDb) {
-        errors.email = 'User not found';
+        errors.email = 'User Not Found';
         return res.status(404).json(errors);
       }
+
 
       if (bcrypt.compareSync(password, userFromDb.encryptedPassword) === false) {
         errors.password = 'Password is incorrect';
@@ -122,7 +81,7 @@ exports.getLogin = (req, res) => {
       const payload = {
         id: userFromDb.id,
         email: userFromDb.email,
-        username: userFromDb.username
+        avatar: userFromDb.avatar
       }; // Create JWT Payload
 
       // Sign Token
@@ -138,9 +97,9 @@ exports.getLogin = (req, res) => {
           });
         }
       );
-    }
-  ); // close UserModel.findOne()
-}
+    })
+  .catch(err => res.json({success: false, err}));
+};
 
 
 
