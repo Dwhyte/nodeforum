@@ -33,12 +33,10 @@ const coverStorage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: process.env.CLOUD_COVER_FOLDER_NAME,
   allowedFormats: ['jpg', 'jpeg', 'jpe', 'png', 'gif'],
-  tranformations: [{
+  transformation: [{
     width: 1600,
     height: 808,
-    // gravity: "face",
-    // radius: "max",
-    // crop: "crop"
+    crop: "limit"
   }]
 });
 
@@ -52,10 +50,12 @@ const avatarParser = multer({
 
 const coverParser = multer({
   storage: coverStorage,
-  limits: {
-    fileSize: 1 * 200 * 200
+  limits: { // file size set to 750kb
+    fileSize: 1 * 750 * 750
   }
 });
+
+const uploadCover = multer().single('cover');
 
 exports.upload = {
   avatarParser,
@@ -74,8 +74,8 @@ exports.updateUserAvatar = (req, res) => {
   image.version = req.file.version;
   image.originalname = req.file.originalname;
 
-  UserModel.findOneAndUpdate(
-    { _id: req.user.id },
+  UserModel.findByIdAndUpdate(
+    req.user.id,
     {
       $set: {
         avatar: {
@@ -111,9 +111,9 @@ exports.updateUserCover = (req, res) => {
   image.version = req.file.version;
   image.originalname = req.file.originalname;
 
-  UserModel.findOneAndUpdate({
-      _id: req.user.id
-    }, {
+  UserModel.findByIdAndUpdate(
+   req.user.id, 
+    {
       $set: {
         cover: {
           url: image.url,
@@ -131,6 +131,7 @@ exports.updateUserCover = (req, res) => {
           err
         });
       }
+      userFromDb.encryptedPassword = undefined;
       res.status(200).json({
         success: true,
         userFromDb
@@ -146,24 +147,17 @@ exports.updateUserCover = (req, res) => {
 // @access  Private 
 // (protected Route)
 exports.updateUserDescription = (res, req) => {
-  UserModel.findOneAndUpdate(
-    { _id: req.user.id }, 
-      {
-        description: req.body.description
-      },
-      (err, userFromDb) => {
-        if (err) {
-          res.status(500).json({
-            success: false,
-            err
-          });
-        }
-        res.status(200).json({
-          success: true,
-          userFromDb
-        });
-      }
+  const { description } = req.body;
+  const { id } = req.user.id;
+
+  UserModel.findByIdAndUpdate(
+    id,
+    { description: description }
   )
+    .then(user => res.json(user))
+    .catch(err => {
+      res.json(err)
+    })
 };
 
 
@@ -171,8 +165,8 @@ exports.updateUserPassword = (res, req) => {
   const salt = bcrypt.genSaltSync(10);
   const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
 
-  UserModel.findOneAndUpdate(
-    { _id: req.user.id },
+  UserModel.findByIdAndUpdate(
+    req.user.id,
       {
         encryptedPassword: scrambledPassword
       },

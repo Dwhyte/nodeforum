@@ -13,7 +13,10 @@ const cors         = require('cors');
 require('dotenv').config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+});
 
 const app = express();
 
@@ -51,6 +54,13 @@ require('./config/passport-config')(passport);
 // Routes
 const index = require('./routes/index');
 app.use('/', index);
+
+const authRoutes = require('./routes/auth-routes');
+app.use('/api', authRoutes);
+
+const userRoutes = require('./routes/user-routes');
+app.use('/api/u/', userRoutes);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
