@@ -11,15 +11,24 @@ router.post('/update/avatar', passport.authenticate('jwt', {
 }), UserController.upload.avatarParser.single('avatar'), UserController.updateUserAvatar);
 
 
-
 router.post('/update/cover', passport.authenticate('jwt', {
   session: false
 }), UserController.upload.coverParser.single('cover'), UserController.updateUserCover);
 
 
-// router.post('/update/cover', passport.authenticate('jwt', {
-//   session: false
-// }), UserController.updateUserCover);
+router.post('/update/bio', passport.authenticate('jwt', {
+  session: false
+}), UserController.updateUserDescription);
+
+
+router.post('/update/passreset', passport.authenticate('jwt', {
+  session: false
+}), UserController.updateUserPassword);
+
+
+router.delete('/remove', passport.authenticate('jwt', {
+  session: false
+}), UserController.removeUser);
 
 
 

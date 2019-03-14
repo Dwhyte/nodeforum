@@ -15,6 +15,9 @@ const UserSchema = new Schema(
       type: String,
       required: true
     },
+    description: {
+      type: String
+    },
     avatar: [{
       url: {
         type: String
@@ -48,10 +51,7 @@ const UserSchema = new Schema(
       originalName: {
         type: String
       }
-    }],
-    description: {
-      type: String
-    }
+    }]
   },
   {
     timestamps: true

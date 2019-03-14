@@ -83,7 +83,7 @@ exports.updateUserAvatar = (req, res) => {
           secure_url: image.secure_url,
           public_id: image.public_id,
           version: image.version,
-          originalname: image.originalname
+          originalName: image.originalname
         }
       }
     },
@@ -120,24 +120,17 @@ exports.updateUserCover = (req, res) => {
           secure_url: image.secure_url,
           public_id: image.public_id,
           version: image.version,
-          originalname: image.originalname
+          originalName: image.originalname
         }
       }
-    },
-    (err, userFromDb) => {
-      if (err) {
-        res.status(500).json({
-          success: false,
-          err
-        });
-      }
-      userFromDb.encryptedPassword = undefined;
-      res.status(200).json({
-        success: true,
-        userFromDb
-      })
     }
   )
+  .then(() => {
+    res.json({
+      success: true
+    })
+  })
+  .catch(err => res.json(err));
 };
 
 
@@ -146,42 +139,43 @@ exports.updateUserCover = (req, res) => {
 // @desc    Update user's bio (description)
 // @access  Private 
 // (protected Route)
-exports.updateUserDescription = (res, req) => {
-  const { description } = req.body;
-  const { id } = req.user.id;
-
+exports.updateUserDescription = (req, res) => {
   UserModel.findByIdAndUpdate(
-    id,
-    { description: description }
+    req.user.id,
+    {
+      $set: {
+        description: req.body.description
+      }
+    }
   )
-    .then(user => res.json(user))
+    .then(() => {
+      res.json({
+        success: true
+      })
+    })
     .catch(err => {
       res.json(err)
     })
 };
 
 
-exports.updateUserPassword = (res, req) => {
+exports.updateUserPassword = (req, res) => {
+  const newPassword = req.body.password;
   const salt = bcrypt.genSaltSync(10);
-  const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
+  const scrambledPassword = bcrypt.hashSync(newPassword, salt);
 
   UserModel.findByIdAndUpdate(
     req.user.id,
       {
         encryptedPassword: scrambledPassword
-      },
-      (err, userFromDb) => {
-        if (err) {
-          res.status(500).json({
-            success: false,
-            err
-          });
-        }
-        res.status(200).json({
-          success: true
-        });
       }
   )
+  .then(() => {
+    res.json({
+      success: true
+    })
+  })
+  .catch(err => res.json(err));
 }
 
 
@@ -189,6 +183,11 @@ exports.updateUserPassword = (res, req) => {
 
 
 // @route   DELETE api/settings/delete-account
-// @desc    Delete user's account and any saved listings under user's id
+// @desc    Delete user's account (Only account)
 // @access  Private 
 // (protected Route)
+exports.removeUser = (req, res) => {
+  UserModel.findByIdAndDelete(req.user.id)
+    .then(() => res.json({success: true}))
+    .catch(err => res.json(err));
+}
