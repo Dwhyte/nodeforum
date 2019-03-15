@@ -20,3 +20,6 @@ const CategoryModel = sequelize.define('category', {
 });
 
 module.exports = CategoryModel;
+
+
+

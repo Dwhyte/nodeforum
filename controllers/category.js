@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 
-// Load Category Model
-const CategoryModel = require('../models/category-model');
+// Load Models
+const Category = require('../models/category-model');
+const User = require('../models/user-model');
+const Thread = require('../models/thread-model');
+const Post = require('../models/post-model');
 
 // Load Validation
 const validateCategoryInput = require('../validation/thread');
@@ -13,23 +16,83 @@ const validateCategoryInput = require('../validation/thread');
 // @desc    Get all threads by category id
 // @access  Public 
 // (public Route)
-exports.getAll = (req, res) => {
-  const valueName = req.params.category;
+exports.getAll = async (req, res) => {
+try {
+  let threads, threadsLatestPost, resThreads
 
-  CategoryModel.findOne({ value: valueName })
-    .populate('threads')
-    .sort({
-      createdAt: -1 // sort all by created date
+  function threadInclude(order) {
+    let options = {
+      model: Thread,
+      order: [
+        ['id', 'DESC']
+      ],
+      where: {},
+      include: [
+        Category,
+        {
+          model: User,
+          attributes: ['username', 'createdAt', 'id', 'avatar']
+        },
+        {
+          model: Post,
+          order: [
+            ['id', 'DESC']
+          ],
+          include: [{
+            model: User,
+            attributes: ['username', 'id']
+          }]
+        }
+      ]
+    }
+    return [options];
+  }
+
+
+
+
+  if (req.params.category === 'ALL') {
+    threads = await Thread.findAll(threadInclude('ASC')[0]);
+    threadsLatestPost = await Thread.findAll(threadInclude('DESC')[0]);
+  } else {
+    threads = await Category.findOne({
+      where: {
+        value: req.params.category
+      },
+      include: threadInclude('ASC')
     })
-    .limit(10)
-    .then(categoryResults => res.json(categoryResults))
-    .catch(err => res.json(err));
 
+    threadsLatestPost = await Category.findOne({
+      where: {
+        value: req.params.category
+      },
+      include: threadInclude('DESC')
+    })
+  }
 
+  if (!threads) {
+    res.json('category does not exists');
+    return;
+  }
 
-  // CategoryModel.find()
-  //   .then(categoryResults => res.json(categoryResults))
-  //   .catch(err => res.json(err));
+  if (Array.isArray(threads)) {
+    resThreads = {
+      name: 'All',
+      value: 'ALL',
+      Threads: threads
+    }
+
+    threadsLatestPost = {
+      Threads: threadsLatestPost
+    }
+  } else {
+    resThreads = threads.toJSON()
+  }
+
+    res.json(resThreads);
+  } catch (error) {
+    res.json(error);
+  }
 }
 
 
@@ -51,7 +114,7 @@ exports.postCategory = (req, res, next) => {
   const value = bigName.toUpperCase();
 
   
-  CategoryModel.create({ name, color, value })
+  Category.create({ name, color, value })
     .then(categoryDoc => res.json(categoryDoc))
     .catch(err => next(err));
 };

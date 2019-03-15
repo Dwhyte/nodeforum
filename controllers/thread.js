@@ -1,3 +1,5 @@
+const urlSlug = require('url-slug');
+
 // Load Thread Model
 const ThreadModel = require('../models/thread-model');
 // const CatergoryModel = require('../models/thread-model');
@@ -11,13 +13,7 @@ const validateThreadInput = require('../validation/thread');
 // @access  Public 
 // (public Route)
 exports.getAllThreads = (req, res) => {
-  ThreadModel.find()
-    .populate('category')
-    .populate('user', ['username', 'avatar', '_id' ])
-    .sort({ 
-      createdAt: -1 // sort all by created date
-    })
-    .limit(10)
+  ThreadModel.findAll()
     .then(threadResults => res.json(threadResults))
     .catch(err => res.json(err));
 }
@@ -32,19 +28,23 @@ exports.getAllThreads = (req, res) => {
 // (private Route)
 exports.postThread = (req, res, next) => {
   const { errors, isValid } = validateThreadInput(req.body);
-
     // check validation
     if (!isValid) {
       // Return errors with 400 status
       return res.status(400).json(errors);
     }
+    const slug = urlSlug(req.body.name);
+    const name = req.body.name;
+    const catId = req.body.categoryId;
 
-  const { slug, name } = req.body
-  const user = req.user.id;
-  const category = '5c8ab4d7707cd62f72056ced';
-  
-
-  ThreadModel.create({ slug, name, user, category })
-    .then(threadDoc => res.json(threadDoc))
-    .catch(err => next(err));
+    req.user.createThread({
+      slug: slug,
+      name: name,
+      categoryId: catId
+    })
+    .then(result => {
+      console.log('THREAD CREATED');
+      res.json({ success: true, result});
+    })
+    .catch(err => res.json({ success: false, err}));
 };
