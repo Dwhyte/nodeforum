@@ -1,8 +1,9 @@
 const urlSlug = require('url-slug');
 
-// Load Thread Model
+// Load Models
 const ThreadModel = require('../models/thread-model');
-// const CatergoryModel = require('../models/thread-model');
+const User = require('../models/user-model');
+const Category = require('../models/category-model');
 
 // Load Validation
 const validateThreadInput = require('../validation/thread');
@@ -13,7 +14,16 @@ const validateThreadInput = require('../validation/thread');
 // @access  Public 
 // (public Route)
 exports.getAllThreads = (req, res) => {
-  ThreadModel.findAll()
+  ThreadModel.findAll({
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: Category
+      }
+    ]
+  })
     .then(threadResults => res.json(threadResults))
     .catch(err => res.json(err));
 }

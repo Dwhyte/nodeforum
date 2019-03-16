@@ -18,13 +18,16 @@ const Thread = require('../models/thread-model');
 const Category = require('../models/category-model');
 const User = require('../models/user-model');
 const Post = require('../models/post-model');
+// const UserThreads = require('../models/user-thread-model');
 
 
-User.belongsToMany(Thread, { through: 'userthreads' });
+User.hasMany(Thread);
 User.hasMany(Post);
 Thread.belongsTo(User);
 Thread.belongsTo(Category);
 Thread.hasMany(Post);
 Post.belongsTo(User);
 Post.belongsTo(Thread);
+Post.hasMany(Post, { as: 'Replies', foreignKey: 'replyId' });
+Post.belongsToMany(User, { as: 'Likes', through: 'user_post' });
 Category.hasMany(Thread);

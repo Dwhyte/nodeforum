@@ -7,7 +7,7 @@ const keys = process.env.secretOrKey;
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
-const UserModel = require("../models/user-model");
+const User = require("../models/user-model");
 
 
 
@@ -24,7 +24,7 @@ exports.getRegister = (req, res) => {
   }
 
   // otherwise check to see if the submitted email is taken.
-  UserModel.findOne({
+  User.findOne({
     where: { email: req.body.email }
   })
   .then(user => {
@@ -64,7 +64,11 @@ exports.getLogin = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  UserModel.findOne({ email: email })
+  User.findOne({
+    where: {
+      email: email
+    }
+  })
     .then(userFromDb => {
       if (!userFromDb) {
         errors.email = 'User Not Found';

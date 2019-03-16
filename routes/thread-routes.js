@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-// api/v1/threads/ALL => GET
+// api/v1/threads => GET
 router.get('/', ThreadController.getAllThreads);
 
 // api/v1/threads => POST

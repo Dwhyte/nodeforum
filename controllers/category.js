@@ -24,20 +24,11 @@ try {
       ],
       where: {},
       include: [
-        Category,
-        {
-          model: User,
-          attributes: ['username', 'createdAt', 'id', 'avatar']
-        },
+        Category, { model: User,  attributes: ['username', 'createdAt', 'id', 'avatar'] },
         {
           model: Post,
-          order: [
-            ['id', order]
-          ],
-          include: [{
-            model: User,
-            attributes: ['username', 'id']
-          }]
+          order: [ ['id', order] ],
+          include: [{ model: User, attributes: ['username', 'id'] }]
         }
       ]
     }
@@ -66,11 +57,15 @@ try {
     })
   }
 
+  // if no threads,
   if (!threads) {
     res.json('category does not exists');
     return;
   }
 
+  // if threads is an array,
+  // create a new array, and assign variables
+  // else, just send threads
   if (Array.isArray(threads)) {
     resThreads = {
       name: 'All',
@@ -84,8 +79,8 @@ try {
   } else {
     resThreads = threads.toJSON()
   }
-
     res.json(resThreads);
+
   } catch (error) {
     res.json(error);
   }
@@ -96,21 +91,26 @@ try {
 // @desc    Create New Category
 // @access  Private (Admin Level)
 // (private admin Route)
-exports.postCategory = (req, res, next) => {
-  const { errors, isValid } = validateCategoryInput(req.body);
-
-    // check validation
-    if (!isValid) {
-      // Return errors with 400 status
-      return res.status(400).json(errors);
-    }
-
-  const { name, color } = req.body;
-  var bigName = name;
-  const value = bigName.toUpperCase();
-
+exports.postCategory = async (req, res, next) => {
+  try {
+    const { errors, isValid } = validateCategoryInput(req.body);
   
-  Category.create({ name, color, value })
-    .then(categoryDoc => res.json(categoryDoc))
-    .catch(err => next(err));
+      // check validation
+      if (!isValid) {
+        // Return errors with 400 status
+        return res.status(400).json(errors);
+      }
+  
+    const { name, color } = req.body;
+    var bigName = name;
+    const value = bigName.toUpperCase();
+      
+    newCategory = await Category.create({name, color, value});
+    res.json({
+      success: true,
+      newCategory
+    });  
+  } catch (error) {
+    next(error);
+  }
 };

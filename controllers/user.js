@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary');
 const cloudinaryStorage = require('multer-storage-cloudinary');
 
 // load user model
-const UserModel = require('../models/user-model');
+const User = require('../models/user-model');
 
 
 // set cloudinary api settings
@@ -67,38 +67,30 @@ exports.upload = {
 // @desc    Add/Update user avatar image
 // @access  Private 
 // (protected Route)
-exports.updateUserAvatar = (req, res) => {
-  console.log(req.file) // see what is in file upload
-  const image = {};
-  image.url = req.file.url;
-  image.secure_url = req.file.secure_url;
-  image.public_id = req.file.public_id;
-  image.version = req.file.version;
-  image.originalname = req.file.originalname;
+exports.updateUserAvatar = async (req, res) => {
+  try {
+    console.log(req.file) // see what is in file upload
+    const image = {};
+    image.url = req.file.url;
+    image.secure_url = req.file.secure_url;
+    image.public_id = req.file.public_id;
+    image.version = req.file.version;
+    image.originalname = req.file.originalname;
 
-  UserModel.findByIdAndUpdate(
-    req.user.id,
-    {
-      $set: {
-        avatar: {
-          url: image.url,
-          secure_url: image.secure_url,
-          public_id: image.public_id,
-          version: image.version,
-          originalName: image.originalname
-        }
-      }
-    },
-    (err, userFromDb) => {
-      if (err) {
-        res.status(500).json({
-          success: false,
-          err
-        });
-      }
-      res.status(200).json({success: true})
-    }
-  )
+
+   let user = await User.findByPk(req.user.id);
+   await user.update({
+     avatar: image.secure_url
+   })
+
+   user.email = undefined;
+   user.encryptedPassword = undefined;
+   res.json(user.toJSON());
+    
+  } catch (error) {
+    next(error);
+  }
+
 };
 
 
@@ -107,35 +99,30 @@ exports.updateUserAvatar = (req, res) => {
 // @desc    Add/Update user cover image
 // @access  Private 
 // (protected Route)
-exports.updateUserCover = (req, res) => {
-  console.log(req.file) // see what is in file upload
-  const image = {};
-  image.url = req.file.url;
-  image.secure_url = req.file.secure_url;
-  image.public_id = req.file.public_id;
-  image.version = req.file.version;
-  image.originalname = req.file.originalname;
+exports.updateUserCover = async (req, res) => {
+  try {
+    console.log(req.file) // see what is in file upload
+    const image = {};
+    image.url = req.file.url;
+    image.secure_url = req.file.secure_url;
+    image.public_id = req.file.public_id;
+    image.version = req.file.version;
+    image.originalname = req.file.originalname;
 
-  UserModel.findByIdAndUpdate(
-   req.user.id, 
-    {
-      $set: {
-        cover: {
-          url: image.url,
-          secure_url: image.secure_url,
-          public_id: image.public_id,
-          version: image.version,
-          originalName: image.originalname
-        }
-      }
-    }
-  )
-  .then(() => {
-    res.json({
-      success: true
+
+    let user = await User.findByPk(req.user.id);
+    await user.update({
+      cover: image.secure_url
     })
-  })
-  .catch(err => res.json(err));
+
+    user.email = undefined;
+    user.encryptedPassword = undefined;
+    res.json(user.toJSON());
+    
+  } catch (error) {
+    next(error);
+  }
+
 };
 
 
@@ -144,23 +131,21 @@ exports.updateUserCover = (req, res) => {
 // @desc    Update user's bio (description)
 // @access  Private 
 // (protected Route)
-exports.updateUserDescription = (req, res) => {
-  UserModel.findByIdAndUpdate(
-    req.user.id,
-    {
-      $set: {
-        description: req.body.description
-      }
-    }
-  )
-    .then(() => {
-      res.json({
-        success: true
-      })
+exports.updateUserDescription = async (req, res, next) => {
+  try {
+
+    let user = await User.findByPk(req.user.id);
+    await user.update({
+      description: req.body.description
     })
-    .catch(err => {
-      res.json(err)
-    })
+
+    user.email = undefined;
+    user.encryptedPassword = undefined;
+    res.json(user.toJSON())
+    
+  } catch (error) {
+    next(error);
+  }
 };
 
 
@@ -169,24 +154,25 @@ exports.updateUserDescription = (req, res) => {
 // @desc    Reset user's password
 // @access  Private 
 // (protected Route)
-exports.updateUserPassword = (req, res) => {
-  const newPassword = req.body.password;
-  const salt = bcrypt.genSaltSync(10);
-  const scrambledPassword = bcrypt.hashSync(newPassword, salt);
+exports.updateUserPassword = async (req, res) => {
+  try {
+    const newPassword = req.body.password;
+    const salt = bcrypt.genSaltSync(10);
+    const scrambledPassword = bcrypt.hashSync(newPassword, salt);
 
-  UserModel.findByIdAndUpdate(
-    req.user.id,
-      {
-        encryptedPassword: scrambledPassword
-      }
-  )
-  .then(() => {
+    let user = await User.findByPk(req.user.id);
+    await user.update({
+      encryptedPassword: scrambledPassword
+    })
+    
     res.json({
       success: true
     })
-  })
-  .catch(err => res.json(err));
-}
+    
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 
@@ -196,8 +182,16 @@ exports.updateUserPassword = (req, res) => {
 // @desc    Delete user's account (Only account)
 // @access  Private 
 // (protected Route)
-exports.removeUser = (req, res) => {
-  UserModel.findByIdAndDelete(req.user.id)
-    .then(() => res.json({success: true}))
-    .catch(err => res.json(err));
-}
+exports.removeUser = async (req, res) => {
+  try {  
+    let user = User.findByPk(req.user.id);
+    await user.destroy();
+    
+    res.json({
+      success: true
+    })
+
+  } catch (error) {
+    next(error);
+  }
+};
