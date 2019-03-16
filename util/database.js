@@ -25,7 +25,7 @@ User.hasMany(Thread);
 User.hasMany(Post);
 Thread.belongsTo(User);
 Thread.belongsTo(Category);
-Thread.hasMany(Post);
+Thread.hasMany(Post, { foreignKeyConstraint: true, onDelete: 'CASCADE' });
 Post.belongsTo(User);
 Post.belongsTo(Thread);
 Post.hasMany(Post, { as: 'Replies', foreignKey: 'replyId' });

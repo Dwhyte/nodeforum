@@ -23,12 +23,13 @@ exports.createPost = async (req, res, next) => {
       return res.status(400).json(errors);
     }
   
-    const { name, content, threadId, replyingToUsername } = req.body;
+    const { name, content, threadId, replyingToUsername, replyId } = req.body;
   
    newPost = await req.user.createPost({
       name: name,
       content: content,
       threadId: threadId,
+      replyId: replyId,
       replyingToUsername: replyingToUsername
     })
     res.json({

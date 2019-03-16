@@ -36,7 +36,7 @@ exports.getRegister = (req, res) => {
       const salt = bcrypt.genSaltSync(10);
       const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
 
-      UserModel.create({
+      User.create({
         username: req.body.username,
         email: req.body.email,
         encryptedPassword: scrambledPassword,
