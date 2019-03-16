@@ -1,7 +1,3 @@
-const express = require("express");
-const router = express.Router();
-
-
 // Load Models
 const Category = require('../models/category-model');
 const User = require('../models/user-model');
@@ -36,7 +32,7 @@ try {
         {
           model: Post,
           order: [
-            ['id', 'DESC']
+            ['id', order]
           ],
           include: [{
             model: User,

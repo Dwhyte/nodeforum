@@ -9,7 +9,9 @@ const router = express.Router();
 // router.get('/category/ALL', ThreadController.getAllThreads);
 
 
-
+router.post('/', passport.authenticate('jwt', {
+  session: false
+}), PostController.createPost);
 
 
 

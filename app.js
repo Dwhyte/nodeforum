@@ -63,7 +63,7 @@ const categoryRoutes = require('./routes/category-routes');
 app.use('/api/v1/category', categoryRoutes);
 
 const postRoutes = require('./routes/post-routes');
-app.use('/api/v1/', postRoutes);
+app.use('/api/v1/post', postRoutes);
 
 
 
