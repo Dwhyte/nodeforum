@@ -34,27 +34,31 @@ exports.getAllThreads = (req, res) => {
 // @desc    create a new thread
 // @access  Private 
 // (private Route)
-exports.postThread = (req, res, next) => {
-  const { errors, isValid } = validateThreadInput(req.body);
-    // check validation
-    if (!isValid) {
-      // Return errors with 400 status
-      return res.status(400).json(errors);
-    }
-    const slug = urlSlug(req.body.name);
-    const name = req.body.name;
-    const catId = req.body.categoryId;
+exports.postThread = async (req, res, next) => {
+  try {
+    const { errors, isValid } = validateThreadInput(req.body);
+      // check validation
+      if (!isValid) {
+        // Return errors with 400 status
+        return res.status(400).json(errors);
+      }
+      const slug = urlSlug(req.body.name);
+      const name = req.body.name;
+      const catId = req.body.categoryId;
+  
+     await req.user.createThread({
+        slug: slug,
+        name: name,
+        categoryId: catId
+      })
 
-    req.user.createThread({
-      slug: slug,
-      name: name,
-      categoryId: catId
-    })
-    .then(result => {
-      console.log('THREAD CREATED');
-      res.json({ success: true, result});
-    })
-    .catch(err => res.json({ success: false, err}));
+      res.json({
+        success: true,
+        message: 'Thread Created!'
+      })
+  } catch (error) {
+    next(error);
+  }
 };
 
 
@@ -74,20 +78,56 @@ exports.getSingleThread = async (req, res, next) => {
           model: User, attributes: ['username', 'createdAt', 'id', 'avatar']
         },
         {
-          model: Post,
-          order: [ ['id', 'DESC'] ],
-          include: [{model: User, attributes: ['username', 'id', 'avatar']}]
+          model: Category, attributes: ['id', 'name', 'value', 'color']
         },
         {
-          model: Category, attributes: ['id', 'name', 'value', 'color']
+          model: Post,
+          order: [ ['id', 'DESC'] ],
+          include: [
+            {model: Post, as: 'Replies', include: [
+              {model: User, attributes: ['username', 'id', 'avatar']}
+            ]},
+            {model: User, as: 'Likes', attributes: ['username', 'createdAt', 'id', 'avatar']},
+            {model: Thread, attributes: ['slug']},
+            {model: User, attributes: ['username', 'id', 'avatar']},
+          
+          ]
         }
       ]
     });
+    res.json({ success: true, thread })
+  } catch (error) {
+    next(error);
+  }
+}
 
-    res.json({
-      success: true,
-      thread
-    })
+
+// @route   DELETE api/thread/:thread/:id
+// @desc    delete thread by slug name and ID
+// @desc    and check if user is authorized.
+// @access  Private 
+// (private Route)
+exports.removeThread = async (req, res, next) => {
+  try {
+    let thread = await Thread.findOne({
+      where: {
+        id: req.body.id,
+        slug: req.params.thread
+      }
+    });
+
+    if(!thread){
+      res.status(400).json({message: 'Thread not found'});
+      return;
+    } else if (thread.userId === req.user.id){
+      await thread.destroy();
+      res.json({success: true, message: 'Thread deleted.'});
+      return;
+    }else{
+      res.status(400).json({notauthorized: 'User not authorized'});
+      return;
+    }
+    
   } catch (error) {
     next(error);
   }

@@ -35,9 +35,6 @@ try {
     return [options];
   }
 
-
-
-
   if (req.params.category === 'ALL') {
     threads = await Thread.findAll(threadInclude('ASC')[0]);
     threadsLatestPost = await Thread.findAll(threadInclude('DESC')[0]);

@@ -55,20 +55,28 @@ exports.likePost = async (req, res, next) => {
     let user = await User.findOne(
       { 
         where: { 
-          username: req.body.username 
+          username: req.user.username
         }
       }
     );
      
     // check if post exists.
     if(!post){ 
-      res.status(400).json({ message: 'post does not exist' }); 
+      res.status(400).json({ message: 'post does not exist' });
+      return; 
     }
     
     // check if user is trying to like their own post.
     if(post.userId === req.user.id){ 
       res.status(400).json({message: 'Cannot like own post'});
+      return;
     }
+
+    // // check if auth user already liked this post.
+    // if(post.likes.username === req.user.username){
+    //   res.status(400).json({message: 'Already liked this post.'});
+    //   return;
+    // }
 
 
     await post.addLikes(user);
@@ -76,9 +84,7 @@ exports.likePost = async (req, res, next) => {
 
 
   } catch (error) {
-    res.status(500).json({
-      error
-    })
+    next(error);
   }
 }
 
@@ -90,16 +96,7 @@ exports.likePost = async (req, res, next) => {
 exports.disLikePost = async (req, res, next) => {
   try {
     
-    let post = await Post.findByPk(req.params.post_id);
-
-    // check if post exists.
-    if (!post) {
-      res.status(400).json({
-        message: 'post does not exist'
-      });
-    }
-
-    
+    let post = await Post.findByPk(req.params.post_id);    
     let user = await User.findOne(
       {
         where: {
@@ -108,13 +105,19 @@ exports.disLikePost = async (req, res, next) => {
       }
     );
 
+    // check if post exists.
+    if(!post) {
+      res.status(400).json({ message: 'post does not exist'});
+      return;
+    }
+
     await post.removeLikes(user)
     res.json({ success: true });
 
 
 
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 }
 
@@ -134,18 +137,15 @@ exports.deletePost = async (req, res, next) => {
 
   // check if post -> userId matches auth user's id
   if(thePost.userId !== req.user.id) {
-    res.status(401).json({
-      message: 'user not authorized.'
-    });
+    res.status(401).json({ message: 'user not authorized.' });
+    return;
   }
 
- await thePost.destroy();
-   res.json({
-     message: 'Post has been removed.'
-   })
+  await thePost.destroy();
+  res.json({ message: 'Post has been removed.'})
 
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 }
 

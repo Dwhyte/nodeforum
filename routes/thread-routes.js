@@ -16,6 +16,10 @@ router.post('/', passport.authenticate('jwt', {
 
 router.get('/:thread', ThreadController.getSingleThread);
 
+router.delete('/:thread', passport.authenticate('jwt', {
+  session: false
+}), ThreadController.removeThread);
+
 
 
 module.exports = router;
