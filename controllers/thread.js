@@ -1,8 +1,9 @@
 const urlSlug = require('url-slug');
 
 // Load Models
-const ThreadModel = require('../models/thread-model');
+const Thread = require('../models/thread-model');
 const User = require('../models/user-model');
+const Post = require('../models/post-model');
 const Category = require('../models/category-model');
 
 // Load Validation
@@ -14,7 +15,7 @@ const validateThreadInput = require('../validation/thread');
 // @access  Public 
 // (public Route)
 exports.getAllThreads = (req, res) => {
-  ThreadModel.findAll({
+  Thread.findAll({
     include: [
       {
         model: User,
@@ -27,9 +28,6 @@ exports.getAllThreads = (req, res) => {
     .then(threadResults => res.json(threadResults))
     .catch(err => res.json(err));
 }
-
-
-
 
 
 // @route   Post api/thread/
@@ -58,3 +56,39 @@ exports.postThread = (req, res, next) => {
     })
     .catch(err => res.json({ success: false, err}));
 };
+
+
+
+// @route   GET api/thread/:thread
+// @desc    Get Single thread by slug name and ID
+// @access  Public 
+// (public Route)
+exports.getSingleThread = async (req, res, next) => {
+  try {
+    let thread = await Thread.findOne({
+      where: {
+        slug: req.params.thread
+      },
+      include: [
+        {
+          model: User, attributes: ['username', 'createdAt', 'id', 'avatar']
+        },
+        {
+          model: Post,
+          order: [ ['id', 'DESC'] ],
+          include: [{model: User, attributes: ['username', 'id', 'avatar']}]
+        },
+        {
+          model: Category, attributes: ['id', 'name', 'value', 'color']
+        }
+      ]
+    });
+
+    res.json({
+      success: true,
+      thread
+    })
+  } catch (error) {
+    next(error);
+  }
+}

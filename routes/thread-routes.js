@@ -14,6 +14,8 @@ router.post('/', passport.authenticate('jwt', {
 }), ThreadController.postThread);
 
 
+router.get('/:thread', ThreadController.getSingleThread);
+
 
 
 module.exports = router;
