@@ -12,10 +12,6 @@ const PostModel = sequelize.define('post', {
     type: Sequelize.TEXT,
     allowNull: false
   },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
   replyingToUsername: {
     type: Sequelize.STRING
   },

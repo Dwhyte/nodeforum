@@ -1,7 +1,7 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-const UserModel = require("../models/user-model");
+const User = require("../models/user-model");
 const keys = process.env.secretOrKey;
 
 const opts = {};
@@ -11,7 +11,7 @@ opts.secretOrKey = keys;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      UserModel.findByPk(jwt_payload.id)
+      User.findByPk(jwt_payload.id)
         .then(user => {
           if (user) {
             return done(null, user);

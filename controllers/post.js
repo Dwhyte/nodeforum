@@ -23,10 +23,9 @@ exports.createPost = async (req, res, next) => {
       return res.status(400).json(errors);
     }
   
-    const { name, content, threadId, replyingToUsername, replyId } = req.body;
+    const { content, threadId, replyingToUsername, replyId } = req.body;
   
    newPost = await req.user.createPost({
-      name: name,
       content: content,
       threadId: threadId,
       replyId: replyId,
@@ -60,13 +59,17 @@ exports.likePost = async (req, res, next) => {
         }
       }
     );
-
+     
+    // check if post exists.
     if(!post){ 
       res.status(400).json({ message: 'post does not exist' }); 
     }
+    
+    // check if user is trying to like their own post.
     if(post.userId === req.user.id){ 
       res.status(400).json({message: 'Cannot like own post'});
     }
+
 
     await post.addLikes(user);
     res.json({ success: true });
@@ -89,13 +92,14 @@ exports.disLikePost = async (req, res, next) => {
     
     let post = await Post.findByPk(req.params.post_id);
 
+    // check if post exists.
     if (!post) {
       res.status(400).json({
         message: 'post does not exist'
       });
     }
 
-
+    
     let user = await User.findOne(
       {
         where: {
@@ -113,18 +117,6 @@ exports.disLikePost = async (req, res, next) => {
     res.json(error);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

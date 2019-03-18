@@ -8,10 +8,10 @@ const UserModel = sequelize.define('user', {
     allowNull: false,
     primaryKey: true
   },
-  username: Sequelize.STRING,
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false
+  username: {
+   type: Sequelize.STRING,
+   unique: true,
+   allowNull: false
   },
   encryptedPassword: {
     type: Sequelize.STRING,
