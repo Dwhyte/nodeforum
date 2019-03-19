@@ -111,18 +111,21 @@ exports.updateUserCover = async (req, res) => {
 
 
     let user = await User.findByPk(req.user.id);
-    await user.update({
-      cover: image.secure_url
-    })
 
-    user.email = undefined;
-    user.encryptedPassword = undefined;
-    res.json(user.toJSON());
-    
+    if(!user){
+      res.status(400).json({message: 'User not found'});
+      return;
+    }else{
+      await user.update({
+        cover: image.secure_url
+      })
+      user.email = undefined;
+      user.encryptedPassword = undefined;
+      res.json(user.toJSON());
+    }
   } catch (error) {
     next(error);
   }
-
 };
 
 
@@ -135,14 +138,18 @@ exports.updateUserDescription = async (req, res, next) => {
   try {
 
     let user = await User.findByPk(req.user.id);
-    await user.update({
-      description: req.body.description
-    })
 
-    user.email = undefined;
-    user.encryptedPassword = undefined;
-    res.json(user.toJSON())
-    
+    if(!user) {
+      res.status(400).json({message: 'User Not Found'});
+      return;
+    } else {
+      await user.update({
+        description: req.body.description
+      })
+      user.email = undefined;
+      user.encryptedPassword = undefined;
+      res.json(user.toJSON())
+    }
   } catch (error) {
     next(error);
   }
@@ -161,14 +168,14 @@ exports.updateUserPassword = async (req, res) => {
     const scrambledPassword = bcrypt.hashSync(newPassword, salt);
 
     let user = await User.findByPk(req.user.id);
-    await user.update({
-      encryptedPassword: scrambledPassword
-    })
-    
-    res.json({
-      success: true
-    })
-    
+    if(!user){
+      res.status(400).json({message: 'User not found.'});
+    }else{
+      await user.update({
+        encryptedPassword: scrambledPassword
+      })
+      res.json({ success: true })
+    }   
   } catch (error) {
     next(error);
   }
@@ -184,13 +191,15 @@ exports.updateUserPassword = async (req, res) => {
 // (protected Route)
 exports.removeUser = async (req, res) => {
   try {  
-    let user = User.findByPk(req.user.id);
-    await user.destroy();
-    
-    res.json({
-      success: true
-    })
+    let user = await User.findByPk(req.user.id);
 
+    if(!user){
+      res.status(400).json({message: 'User not found'});
+      return;
+    }else{
+      await user.destroy();
+      res.json({ success: true });
+    }
   } catch (error) {
     next(error);
   }

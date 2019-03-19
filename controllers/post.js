@@ -39,8 +39,7 @@ exports.createPost = async (req, res, next) => {
   } catch (error) {
     res.json(error);
   }
-  
-}
+};
 
 
 
@@ -114,8 +113,6 @@ exports.disLikePost = async (req, res, next) => {
     await post.removeLikes(user)
     res.json({ success: true });
 
-
-
   } catch (error) {
     next(error);
   }
@@ -134,6 +131,11 @@ exports.deletePost = async (req, res, next) => {
 
   // find the post
   thePost = await Post.findByPk(req.params.id);
+
+  if(!thePost){
+    res.status(400).json({message: 'No Post'});
+    return;
+  }
 
   // check if post -> userId matches auth user's id
   if(thePost.userId !== req.user.id) {

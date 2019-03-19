@@ -14,19 +14,28 @@ const validateThreadInput = require('../validation/thread');
 // @desc    get all threads/by category
 // @access  Public 
 // (public Route)
-exports.getAllThreads = (req, res) => {
-  Thread.findAll({
-    include: [
-      {
-        model: User,
-      },
-      {
-        model: Category
-      }
-    ]
-  })
-    .then(threadResults => res.json(threadResults))
-    .catch(err => res.json(err));
+exports.getAllThreads = async (req, res, next) => {
+  try {
+    let threads = await Thread.findAll({
+       include: [
+         {
+           model: User,
+         },
+         {
+           model: Category
+         }
+       ]
+     });
+     if(!threads) {
+       res.status(400).json({message: 'No Threads'});
+       return;
+     }else{
+       res.status({success: true, threads});
+       return;
+     }
+  } catch (error) {
+    next(error);
+  }
 }
 
 
@@ -52,10 +61,7 @@ exports.postThread = async (req, res, next) => {
         categoryId: catId
       })
 
-      res.json({
-        success: true,
-        message: 'Thread Created!'
-      })
+      res.json({ success: true, message: 'Thread Created!'})
   } catch (error) {
     next(error);
   }
@@ -95,7 +101,12 @@ exports.getSingleThread = async (req, res, next) => {
         }
       ]
     });
-    res.json({ success: true, thread })
+    if(!thread) {
+      res.status(400).json({message: 'No Thread'});
+      return;
+    }else{
+      res.json({ success: true, thread })
+    }
   } catch (error) {
     next(error);
   }
