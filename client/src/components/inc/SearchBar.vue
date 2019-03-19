@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="search-bar" class="container-fluid">
 
   </div>
 </template>
@@ -8,6 +8,10 @@ export default {
 
 }
 </script>
-<style scoped>
-
+<style>
+#search-bar {
+  background-color: #041af0c2;
+  height: 11vh;
+  display: block;
+}
 </style>

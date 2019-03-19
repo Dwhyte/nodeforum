@@ -1,16 +1,10 @@
 body {
-  padding-top: 5rem;
-  font-family: 'Montserrat', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  padding-top: 4rem;
+  font-family: 'Lato', sans-serif;
+  /* -webkit-font-smoothing: antialiased; */
 }
 
 .starter-template {
   padding: 3rem 1.5rem;
   text-align: center;
-}
-
-.forum-nav {
-  height: 64px;
-  background: #1A2568;
-  box-shadow: 0 1px 3px 0 rgba(51, 51, 51, 0.08);
 }

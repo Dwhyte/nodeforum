@@ -5,30 +5,40 @@
       <div class="col-lg-6 m-auto">
         <div class="col-md-6 offset-md-3">
           <h1 class="title mb-4">Sign Up</h1>
-            <form>
+            <form novalidate @submit.prevent="submitRegister">
               <div class="form-group row">
                 <input
-                  id="email"
-                  type="email"
+                  id="username"
+                  type="text"
                   class="form-control"
-                  name="email"
-                  placeholder="Email" required autofocus
+                  v-model="username"
+                  placeholder="Username" required autofocus
                 >
+                <div :style="{display: errors.username ? 'display' : 'block'}" class="invalid-feedback">{{ errors.username }}</div>
               </div>
               <div class="form-group row">
                   <input
                     id="password"
                     type="password"
                     class="form-control"
-                    name="password"
+                    v-model="password"
                     placeholder="Passsword" required
                   >
+                  <div :style="{display: errors.password ? 'display' : 'block'}" class="invalid-feedback">{{ errors.password }}</div>
+              </div>
+              <div class="form-group row">
+                  <input
+                    id="confirm-password"
+                    type="password"
+                    class="form-control"
+                    v-model="password2"
+                    placeholder="Confirm Password" required
+                  >
+                  <div :style="{display: errors.password2 ? 'display' : 'block'}" class="invalid-feedback">{{ errors.password2 }}</div>
               </div>
               <div class="form-group row">
                   <div class="col-md-12">
-                      <button type="submit" class="btn">
-                          Login
-                      </button>
+                      <button type="submit" class="btn">Register</button>
                   </div>
               </div>
               <div class="form-group row mb-0">
@@ -36,6 +46,7 @@
                       <p>Already have an account?
                       <router-link to="/login"><a>Login</a></router-link>
                       </p>
+                      <p><a href="/">Back home</a></p>
                   </div>
               </div>
           </form>
@@ -46,7 +57,28 @@
 </template>
 <script>
 export default {
-
+  name: 'Register',
+  data () {
+    return {
+      username: '',
+      password: '',
+      password2: ''
+    }
+  },
+  methods: {
+    submitRegister(){
+      this.$store.dispatch('RegisterUser', {
+        username: this.username,
+        password: this.password,
+        password2: this.password2
+      })
+    }
+  },
+  computed: {
+    errors(){
+      return !this.$store.getters.registerErrors ? false : this.$store.getters.registerErrors;
+    }
+  },
 }
 </script>
 <style>
@@ -55,6 +87,10 @@ body{
 }
 
 .forum-nav{
+  display: none;
+}
+
+#search-bar {
   display: none;
 }
 

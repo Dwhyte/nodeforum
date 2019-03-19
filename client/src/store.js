@@ -12,7 +12,7 @@ export default new Vuex.Store({
   state:{
     isLoading: false,
     isAuthenticated: false,
-    currentUser: null,
+    currentUser: {},
     loginErrors: {},
     registerErrors: {}
   },
@@ -23,7 +23,7 @@ export default new Vuex.Store({
     },
     logoutUser(state){
       state.isAuthenticated = false
-      state.currentUser = null
+      state.currentUser = {}
     },
     loginErrors(state, errorData) {
         state.loginErrors = errorData
@@ -33,7 +33,21 @@ export default new Vuex.Store({
     },
   },
   getters: {
-
+    currentUser(state) {
+      return state.currentUser
+    },
+    AuthCheck(state) {
+      return state.isAuthenticated
+    },
+    errors(state) {
+      return state.errors
+    },
+    loginErrors(state) {
+        return state.loginErrors
+    },
+    registerErrors(state) {
+      return state.registerErrors
+    },
   },
   actions: {
     setCurrentUser({commit, dispatch}, userToken){
@@ -41,7 +55,7 @@ export default new Vuex.Store({
     },
 
     // Login User
-    loginUser({commit, dispatch}, authData) {
+    LoginUser({commit, dispatch}, authData) {
       axios.post('/api/login', {
         username: authData.username,
         password: authData.password

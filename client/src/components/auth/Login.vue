@@ -5,30 +5,30 @@
       <div class="col-lg-6 m-auto">
         <div class="col-md-6 offset-md-3">
           <h1 class="title mb-4">Welcome Back!</h1>
-            <form>
+            <form novalidate @submit.prevent="submitLogin">
               <div class="form-group row">
                 <input
-                  id="email"
-                  type="email"
+                  id="username"
+                  type="text"
                   class="form-control"
-                  name="email"
-                  placeholder="Email" required autofocus
+                  v-model="username"
+                  placeholder="Username" required autofocus
                 >
+                <div :style="{display: errors.username ? 'display' : 'block'}" class="invalid-feedback">{{ errors.username }}</div>
               </div>
               <div class="form-group row">
                   <input
                     id="password"
                     type="password"
                     class="form-control"
-                    name="password"
+                    v-model="password"
                     placeholder="Passsword" required
                   >
+                  <div :style="{display: errors.password ? 'display' : 'block'}" class="invalid-feedback">{{ errors.password }}</div>
               </div>
               <div class="form-group row">
                   <div class="col-md-12">
-                      <button type="submit" class="btn">
-                          Login
-                      </button>
+                      <button type="submit" class="btn">Login</button>
                   </div>
               </div>
               <div class="form-group row mb-0">
@@ -36,6 +36,7 @@
                       <p>Don't have an account?
                       <router-link to="/register"><a>Register</a></router-link>
                       </p>
+                      <p><a href="/">Back home</a></p>
                   </div>
               </div>
           </form>
@@ -46,7 +47,26 @@
 </template>
 <script>
 export default {
-
+  name: 'Login',
+  data () {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    submitLogin(){
+      this.$store.dispatch('LoginUser', {
+        username: this.username,
+        password: this.password
+      })
+    }
+  },
+  computed: {
+    errors(){
+      return !this.$store.getters.loginErrors ? false : this.$store.getters.loginErrors;
+    }
+  },
 }
 </script>
 <style>
@@ -55,6 +75,10 @@ body{
 }
 
 .forum-nav{
+  display: none;
+}
+
+#search-bar {
   display: none;
 }
 
