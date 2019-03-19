@@ -106,36 +106,4 @@ body{
     height: 100vh;
     background-repeat: no-repeat;
 }
-
-#auth-view input {
-    background-color: transparent;
-    padding: 11px;
-    border: 1px solid #dbdbdb;
-    border-radius: 2px;
-    box-sizing: border-box;
-}
-
-#auth-view button,
-#auth-view input[type=text],
-#auth-view input[type=email],
-#auth-view input[type=password],
-#auth-view label {
-    width: 100%;
-    font-size: 20px !important;
-    line-height: 24px;
-    color: #484848;
-    font-weight: 300;
-    -webkit-appearance: none;
-    height: 48px;
-}
-
-
-#auth-view .question {
-    margin-top: 11px;
-    text-align: center;
-}
-
-#auth-view .question p {
-    font-size: 16px;
-}
 </style>

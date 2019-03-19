@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     onLogout(){
-      this.$store.dispatch('logoutUser');
+      this.$store.dispatch('LogoutUser');
     }
   }
 }
@@ -69,7 +69,7 @@ export default {
 }
 
 .navbar .name {
-  font-size: 12px;
+  font-size: 14px;
   color: #ffffff;
   margin-right: 12px;
 }

@@ -21,6 +21,9 @@ export default new Vuex.Store({
       state.currentUser = user
       state.isAuthenticated = true
     },
+    clearCurrentProfile(state) {
+      state.profile = null
+    },
     logoutUser(state){
       state.isAuthenticated = false
       state.currentUser = {}

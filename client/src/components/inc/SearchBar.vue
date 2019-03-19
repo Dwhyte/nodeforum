@@ -11,7 +11,7 @@ export default {
 <style>
 #search-bar {
   background-color: #041af0c2;
-  height: 11vh;
+  height: 9vh;
   display: block;
 }
 </style>

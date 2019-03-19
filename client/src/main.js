@@ -35,7 +35,7 @@ if (localStorage.jwtToken) {
     // Logout the user
     store.commit('logoutUser');
     // // Clear the current profile
-    // store.commit('clearCurrentProfile');
+    store.commit('clearCurrentProfile');
   }
 }
 
@@ -49,14 +49,6 @@ router.beforeEach((to, from, next) => {
     })
     return
   }
-
-  // // if logged in redirect to dashboard
-  // if (to.path === '/' && store.state.isAuthenticated) {
-  //   next({
-  //     name: ''
-  //   })
-  //   return
-  // }
 
   // if logged in redirect to profile
   if (to.path === '/register' && store.state.isAuthenticated) {
@@ -73,14 +65,6 @@ router.beforeEach((to, from, next) => {
     })
     return
   }
-
-  // // if logged out redirect to home
-  // if (to.path === '/feed' && !store.state.isAuthenticated) {
-  //   next({
-  //     name: 'Landing'
-  //   })
-  //   return
-  // }
 
   next()
 })

@@ -1,8 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-    <h1>Landing</h1>
-    </div>
+  <div>
+    <h1>Threads</h1>
   </div>
 </template>
 <script>
@@ -14,6 +12,3 @@ export default {
   }
 }
 </script>
-<style>
-
-</style>
