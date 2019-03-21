@@ -79,14 +79,16 @@ exports.updateUserAvatar = async (req, res) => {
 
 
    let user = await User.findByPk(req.user.id);
-   await user.update({
-     avatar: image.secure_url
-   })
 
-   user.email = undefined;
-   user.encryptedPassword = undefined;
-   res.json(user.toJSON());
-    
+   if(!user){
+     res.status(400).json({message: 'User not found'});
+     return;
+   }else{
+     await user.update({ avatar: image.secure_url });
+     user.email = undefined;
+     user.encryptedPassword = undefined;
+     res.json(user.toJSON());
+   }
   } catch (error) {
     next(error);
   }
@@ -116,9 +118,7 @@ exports.updateUserCover = async (req, res) => {
       res.status(400).json({message: 'User not found'});
       return;
     }else{
-      await user.update({
-        cover: image.secure_url
-      })
+      await user.update({ cover: image.secure_url });
       user.email = undefined;
       user.encryptedPassword = undefined;
       res.json(user.toJSON());
@@ -143,9 +143,7 @@ exports.updateUserDescription = async (req, res, next) => {
       res.status(400).json({message: 'User Not Found'});
       return;
     } else {
-      await user.update({
-        description: req.body.description
-      })
+      await user.update({ description: req.body.description });
       user.email = undefined;
       user.encryptedPassword = undefined;
       res.json(user.toJSON())

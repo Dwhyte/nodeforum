@@ -31,7 +31,6 @@
           </div>
         </div>
       </nav>
-    <search-bar></search-bar>
   </div>
 </template>
 <script>
@@ -57,9 +56,10 @@ export default {
 </script>
 <style>
 .forum-nav {
-  height: 72px;
-  background: #1A2568;
-  box-shadow: 0 1px 3px 0 rgba(51, 51, 51, 0.08);
+  /* height: 72px; */
+  background: #fff;
+  -webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,.08);
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.08);
 }
 
 .navbar .avatar{

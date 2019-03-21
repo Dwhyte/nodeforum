@@ -96,7 +96,6 @@ exports.getSingleThread = async (req, res, next) => {
             {model: User, as: 'Likes', attributes: ['username', 'createdAt', 'id', 'avatar']},
             {model: Thread, attributes: ['slug']},
             {model: User, attributes: ['username', 'id', 'avatar']},
-          
           ]
         }
       ]
