@@ -11,6 +11,7 @@ import router from './router'
 import jwt_decode from 'jwt-decode'
 import store from './store'
 import setAuthToken from './utils/setAuthToken'
+import VueTruncate from 'vue-truncate-filter'
 
 
 Vue.config.productionTip = false
@@ -68,6 +69,8 @@ router.beforeEach((to, from, next) => {
 
   next()
 })
+
+Vue.use(VueTruncate)
 
 
 /* eslint-disable no-new */

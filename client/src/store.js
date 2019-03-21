@@ -14,7 +14,8 @@ export default new Vuex.Store({
     isAuthenticated: false,
     currentUser: {},
     loginErrors: {},
-    registerErrors: {}
+    registerErrors: {},
+    threads: {}
   },
   mutations: {
     setCurrentUser(state, user){
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     registerErrors(state, errorData) {
       state.registerErrors = errorData
     },
+    setThreads(state, threads){
+      state.threads = threads
+    }
   },
   getters: {
     currentUser(state) {
@@ -51,6 +55,9 @@ export default new Vuex.Store({
     registerErrors(state) {
       return state.registerErrors
     },
+    getThreads(state) {
+      return state.threads
+    }
   },
   actions: {
     setCurrentUser({commit, dispatch}, userToken){
@@ -118,7 +125,18 @@ export default new Vuex.Store({
 
       // redirect to home
       router.push('/');
-    }
+    },
 
+
+    // Get Threads by Category
+   async GetThreads({commit, dispatch}) {
+     try {
+       const response = await axios.get('/api/v1/category/ALL');
+       commit('setThreads', response.data);
+
+     } catch (error) {
+        commit('setThreads', {})
+     }
+    }
   }
 })

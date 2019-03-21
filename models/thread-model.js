@@ -17,6 +17,10 @@ const ThreadModel = sequelize.define('thread', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  content: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
   postsCount: {
     type: Sequelize.INTEGER,
     defaultValue: 0

@@ -5,40 +5,59 @@
       <div class="col-lg-6 m-auto">
         <div class="col-md-6 offset-md-3">
           <h1 class="title mb-4">Welcome Back!</h1>
-            <form novalidate @submit.prevent="submitLogin">
-              <div class="form-group row">
-                <input
-                  id="username"
-                  type="text"
-                  class="form-control"
-                  v-model="username"
-                  placeholder="Username" required autofocus
-                >
-                <div :style="{display: errors.username ? 'display' : 'block'}" class="invalid-feedback">{{ errors.username }}</div>
+          <form novalidate @submit.prevent="submitLogin">
+            <div class="form-group row">
+              <input
+                id="username"
+                type="text"
+                class="form-control"
+                v-model="username"
+                placeholder="Username"
+                required
+                autofocus
+              >
+              <div
+                :style="{display: errors.username ? 'display' : 'block'}"
+                class="invalid-feedback"
+              >{{ errors.username }}</div>
+            </div>
+            <div class="form-group row">
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                v-model="password"
+                placeholder="Passsword"
+                required
+              >
+              <div
+                :style="{display: errors.password ? 'display' : 'block'}"
+                class="invalid-feedback"
+              >{{ errors.password }}</div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <button type="submit" class="btn">Login</button>
               </div>
-              <div class="form-group row">
-                  <input
-                    id="password"
-                    type="password"
-                    class="form-control"
-                    v-model="password"
-                    placeholder="Passsword" required
-                  >
-                  <div :style="{display: errors.password ? 'display' : 'block'}" class="invalid-feedback">{{ errors.password }}</div>
+            </div>
+            <div class="form-group row mb-0">
+              <div class="col-md-12 question">
+                <p>
+                  Don't have an account?
+                  <router-link to="/register">
+                    <a>Register</a>
+                  </router-link>
+                </p>
+                <p>
+                  <a href="/">Back home</a>
+                </p>
+                <!-- <p>
+                  <router-link to="/">
+                    <a>Back home</a>
+                  </router-link>
+                </p>-->
               </div>
-              <div class="form-group row">
-                  <div class="col-md-12">
-                      <button type="submit" class="btn">Login</button>
-                  </div>
-              </div>
-              <div class="form-group row mb-0">
-                  <div class="col-md-12 question">
-                      <p>Don't have an account?
-                      <router-link to="/register"><a>Register</a></router-link>
-                      </p>
-                      <p><a href="/">Back home</a></p>
-                  </div>
-              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -47,34 +66,36 @@
 </template>
 <script>
 export default {
-  name: 'Login',
-  data () {
+  name: "Login",
+  data() {
     return {
-      username: '',
-      password: ''
-    }
+      username: "",
+      password: ""
+    };
   },
   methods: {
-    submitLogin(){
-      this.$store.dispatch('LoginUser', {
+    submitLogin() {
+      this.$store.dispatch("LoginUser", {
         username: this.username,
         password: this.password
-      })
+      });
     }
   },
   computed: {
-    errors(){
-      return !this.$store.getters.loginErrors ? false : this.$store.getters.loginErrors;
+    errors() {
+      return !this.$store.getters.loginErrors
+        ? false
+        : this.$store.getters.loginErrors;
     }
-  },
-}
+  }
+};
 </script>
 <style>
-body{
+body {
   padding-top: 0;
 }
 
-.forum-nav{
+.forum-nav {
   display: none;
 }
 
@@ -82,17 +103,16 @@ body{
   display: none;
 }
 
-#auth-view .title{
+#auth-view .title {
   text-align: center;
 }
 
 #auth-view.login .splash-bg {
-    width: 100%;
-    background-image: url('https://res.cloudinary.com/duzsc1kx7/image/upload/v1553023074/josh-wilburne-114305-unsplash_p8ejcz.jpg');
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-    background-repeat: no-repeat;
+  width: 100%;
+  background-image: url("https://res.cloudinary.com/duzsc1kx7/image/upload/v1553023074/josh-wilburne-114305-unsplash_p8ejcz.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  background-repeat: no-repeat;
 }
-
 </style>
