@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import NotFound from '../components/inc/NotFound.vue'
 import Landing from '@/components/pages/home/Landing'
 import Login from '../components/auth/Login.vue'
@@ -21,9 +20,14 @@ export default new Router({
       component: NotFound
     },
     {
-      path: '/',
+      path: '/category/:category',
       name: 'Landing',
-      component: Landing
+      component: Landing,
+      // children: [
+      //   {
+
+      //   }
+      // ]
     },
     {
       path: '/login',

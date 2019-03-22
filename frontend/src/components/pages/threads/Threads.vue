@@ -1,7 +1,8 @@
 <template>
-  <div id="threads-section" class="col-lg-9 ml-auto mr-auto">
+  <div id="threads-section" class="col-lg-10 ml-auto mr-auto">
     <div class="mb-4">
-      <ul class="list-unstyled" v-for="thread in threads.Threads" :key="thread.id">
+      <div class="loading" v-if="loading">Loading...</div>
+      <ul v-else class="list-unstyled" v-for="thread in threads.Threads" :key="thread.id">
         <li class="threadblock-norm thread mb-4">
           <div class="thread-title">
             <router-link
@@ -31,13 +32,25 @@ export default {
     return {};
   },
   mounted() {
-    this.$store.dispatch("GetThreads");
+    this.getThreads();
+  },
+  watch: {
+    $route: "getThreads"
   },
   computed: {
     threads() {
       return !this.$store.getters.getThreads
         ? false
         : this.$store.getters.getThreads;
+    },
+    loading() {
+      return this.$store.state.isLoading;
+    }
+  },
+  methods: {
+    getThreads() {
+      let catSlug = this.$route.params.category.toUpperCase();
+      this.$store.dispatch("GetThreads", catSlug);
     }
   }
 };

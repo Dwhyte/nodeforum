@@ -56,7 +56,7 @@ try {
 
   // if no threads,
   if (!threads) {
-    res.json('category does not exists');
+    res.json('Threads does not exists for this category');
     return;
   }
 
@@ -82,32 +82,3 @@ try {
     res.json(error);
   }
 }
-
-
-// @route   Post api/category/
-// @desc    Create New Category
-// @access  Private (Admin Level)
-// (private admin Route)
-exports.postCategory = async (req, res, next) => {
-  try {
-    const { errors, isValid } = validateCategoryInput(req.body);
-  
-      // check validation
-      if (!isValid) {
-        // Return errors with 400 status
-        return res.status(400).json(errors);
-      }
-  
-    const { name, color } = req.body;
-    var bigName = name;
-    const value = bigName.toUpperCase();
-      
-    newCategory = await Category.create({name, color, value});
-    res.json({
-      success: true,
-      newCategory
-    });  
-  } catch (error) {
-    next(error);
-  }
-};

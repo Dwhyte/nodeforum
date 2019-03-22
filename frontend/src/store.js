@@ -16,9 +16,13 @@ export default new Vuex.Store({
     loginErrors: {},
     registerErrors: {},
     threads: {},
-    thread: {}
+    thread: {},
+    categories: {}
   },
   mutations: {
+    setLoader(state, loader) {
+      state.isLoading = loader
+    },
     setCurrentUser(state, user){
       state.currentUser = user
       state.isAuthenticated = true
@@ -38,12 +42,20 @@ export default new Vuex.Store({
     },
     setThreads(state, threads){
       state.threads = threads
+      state.isLoading = false
     },
     setSingleThread(state, thread) {
       state.thread = thread
+      state.isLoading = false
+    },
+    setCatNames(state, cats) {
+      state.categories = cats
     }
   },
   getters: {
+    loaderStatus(state) {
+      return state.isLoading
+    },
     currentUser(state) {
       return state.currentUser
     },
@@ -64,10 +76,13 @@ export default new Vuex.Store({
     },
     getSingleThread(state) {
       return state.thread
+    },
+    getCategoryNames(state) {
+      return state.categories
     }
   },
   actions: {
-    setCurrentUser({commit, dispatch}, userToken){
+    setCurrentUser({commit}, userToken){
       commit('setCurrentUser', userToken)
     },
 
@@ -93,7 +108,12 @@ export default new Vuex.Store({
         // send user data to setCurrentUser
         dispatch('setCurrentUser', decoded)
         // window.location.replace('/');
-        router.push('/');
+        router.push({
+          name: 'Landing',
+          params: {
+            category: 'all'
+          }
+        });
       })
       .catch(error => {
         commit('loginErrors', error.response.data);
@@ -108,12 +128,16 @@ export default new Vuex.Store({
         password: userData.password,
         password2: userData.password2
       })
-      .then(res => {
-        console.log(res.data);
-        router.push('/login');
+      .then(() => {
+        // router.push('/login');
+        router.push({
+        name: 'Landing',
+        params: {
+          category: 'all'
+        }
+      });
       })
       .catch(error => {
-        console.log(error);
         commit('registerErrors', error.response.data);
       })
     },
@@ -131,15 +155,32 @@ export default new Vuex.Store({
       commit('logoutUser');
 
       // redirect to home
-      router.push('/');
+      router.push({
+        name: 'Landing',
+        params: {
+          category: 'all'
+        }
+      });
+    },
+
+    // Get All Category Names
+    async GetCategoryNames({commit}) {
+      try {
+        const response = await axios.get('/api/v1/catlist/names');
+        commit('setCatNames', response.data);  
+      } catch (error) {
+        commit('setCatNames', {})
+      }
     },
 
 
     // Get Threads by Category
-   async GetThreads({commit, dispatch}) {
+   async GetThreads({commit}, category) {
      try {
-       const response = await axios.get('/api/v1/category/ALL');
+       commit('setLoader', true);
+       const response = await axios.get(`/api/v1/category/${category}`);
        commit('setThreads', response.data);
+      //  commit('setLoader', false);
 
      } catch (error) {
         commit('setThreads', {})
@@ -147,8 +188,9 @@ export default new Vuex.Store({
     },
 
     // Get A Single Thread by Slug
-    async GetSingleThread({commit, dispatch}, slug) {
+    async GetSingleThread({commit}, slug) {
       try {
+        commit('setLoader', true);
         const response = await axios.get(`/api/v1/threads/${slug}`);
         commit('setSingleThread', response.data);
       } catch (error) {

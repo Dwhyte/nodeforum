@@ -62,6 +62,9 @@ app.use('/api/v1/threads', threadRoutes);
 const categoryRoutes = require('./routes/category-routes');
 app.use('/api/v1/category', categoryRoutes);
 
+const catListRoutes = require('./routes/cat-list-routes');
+app.use('/api/v1/catlist', catListRoutes);
+
 const postRoutes = require('./routes/post-routes');
 app.use('/api/v1/post', postRoutes);
 

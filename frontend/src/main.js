@@ -52,10 +52,24 @@ router.beforeEach((to, from, next) => {
     return
   }
 
+    // if logged in redirect to profile
+  if (to.path === '/' && store.state.isAuthenticated) {
+    next({
+      name: 'Landing',
+      params: {
+        category: 'all'
+      }
+    })
+    return
+  }
+
   // if logged in redirect to profile
   if (to.path === '/register' && store.state.isAuthenticated) {
     next({
-      name: 'Landing'
+      name: 'Landing',
+      params: {
+        category: 'all'
+      }
     })
     return
   }
@@ -63,7 +77,10 @@ router.beforeEach((to, from, next) => {
   // if logged in redirect to profile
   if (to.path === '/login' && store.state.isAuthenticated) {
     next({
-      name: 'Landing'
+      name: 'Landing',
+      params: {
+        category: 'all'
+      }
     })
     return
   }

@@ -18,7 +18,7 @@
             class="btn btn-sm btn-outline-claim font-weight-bold text-uppercase"
           >Login to Post</router-link>
         </div>
-        <category-selections/>
+        <category-actions/>
         <threads/>
       </div>
     </div>
@@ -26,11 +26,11 @@
 </template>
 <script>
 import Threads from "../threads/Threads";
-import CategorySelections from "../../categories/Category";
+import CategoryActions from "../../categories/CategoryActions";
 export default {
   components: {
     Threads,
-    CategorySelections
+    CategoryActions
   },
   data() {
     return {};

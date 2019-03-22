@@ -44,7 +44,17 @@
                 <router-link v-if="isAuth" to="/profile" activeClass="active" tag="li">
                   <a class="dropdown-item">Profile</a>
                 </router-link>
-                <a href v-if="isAuth" class="dropdown-item" @click="onLogout">Logout</a>
+                <!-- <li>
+                  <a href v-if="isAuth" class="dropdown-item" @click="onLogout">Logout</a>
+                </li>-->
+                <li>
+                  <button
+                    v-if="isAuth"
+                    @click="onLogout"
+                    type="button"
+                    class="btn btn-link dropdown-item"
+                  >Logout</button>
+                </li>
               </div>
             </li>
           </ul>
@@ -78,5 +88,9 @@ export default {
   }
 };
 </script>
-<style>
+ <style scoped>
+.dropdown-menu .btn.btn-link {
+  box-shadow: none;
+}
 </style>
+
