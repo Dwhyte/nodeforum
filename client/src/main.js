@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
   // if logged in redirect to profile
   if (to.path === '/register' && store.state.isAuthenticated) {
     next({
-      name: 'Profile'
+      name: 'Landing'
     })
     return
   }
@@ -62,7 +62,7 @@ router.beforeEach((to, from, next) => {
   // if logged in redirect to profile
   if (to.path === '/login' && store.state.isAuthenticated) {
     next({
-      name: 'Profile'
+      name: 'Landing'
     })
     return
   }
@@ -71,6 +71,7 @@ router.beforeEach((to, from, next) => {
 })
 
 Vue.use(VueTruncate)
+Vue.use(require('vue-moment'));
 
 
 /* eslint-disable no-new */

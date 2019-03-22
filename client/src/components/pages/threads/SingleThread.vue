@@ -1,14 +1,33 @@
 <template>
-  <div>
-    <h1>Single Thread Component</h1>
+  <div v-if="data.thread">
+    <h1>{{ data.thread.name }}</h1>
   </div>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
-
+      routeSlug: this.$route.params.slug
+    };
+  },
+  mounted() {
+    this.getSingleThread();
+  },
+  watch: {
+    // call again the method if the route change
+    $route: "getSingleThread"
+  },
+  computed: {
+    data() {
+      return !this.$store.getters.getSingleThread
+        ? false
+        : this.$store.getters.getSingleThread;
+    }
+  },
+  methods: {
+    getSingleThread() {
+      this.$store.dispatch("GetSingleThread", this.routeSlug);
     }
   }
-}
+};
 </script>

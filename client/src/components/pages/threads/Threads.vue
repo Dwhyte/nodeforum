@@ -2,9 +2,22 @@
   <div id="threads-section" class="col-lg-9 ml-auto mr-auto">
     <div class="mb-4">
       <ul class="list-unstyled" v-for="thread in threads.Threads" :key="thread.id">
-        <li class="threadblock-norm thread">
+        <li class="threadblock-norm thread mb-4">
           <div class="thread-title">
-            <router-link :to="`/thread/${thread.slug}`" class="font-weight-bold">{{ thread.name }}</router-link>
+            <router-link
+              :to="`/threads/${thread.slug}`"
+              class="font-weight-bold"
+            >{{ thread.name | truncate(50) }}</router-link>
+            <div class="thread-meta">
+              <div>
+                <span class="display-name">By {{ thread.user.username }}</span>
+                <span class="display-category">In {{ thread.category.value }}</span>
+                <span class="display-date">
+                  · {{ thread.createdAt | moment("MMMM Do") }}
+                  <small>({{ thread.createdAt | moment("from", "now") }})</small>
+                </span>
+              </div>
+            </div>
             <div class="small mt-2">{{ thread.content | truncate(200) }}</div>
           </div>
         </li>
@@ -46,7 +59,13 @@ export default {
   transition: all 0.2s ease-in-out;
 }
 
-.thread-title router-link {
+.thread-title a {
   text-transform: capitalize;
+}
+
+.thread-meta {
+  font-size: 14px;
+  display: inline-block;
+  float: right;
 }
 </style>

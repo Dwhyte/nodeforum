@@ -5,6 +5,8 @@ import NotFound from '../components/inc/NotFound.vue'
 import Landing from '@/components/pages/home/Landing'
 import Login from '../components/auth/Login.vue'
 import Register from '../components/auth/Register.vue'
+import SingleThread from '../components/pages/threads/SingleThread.vue'
+import CreateThread from '../components/pages/threads/CreateThread.vue'
 
 Vue.use(Router)
 
@@ -32,6 +34,18 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/threads/:slug',
+      component: SingleThread
+    },
+    {
+      path: '/thread/new',
+      name: 'NewThread',
+      component: CreateThread,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })

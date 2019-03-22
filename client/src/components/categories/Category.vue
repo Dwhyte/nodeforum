@@ -11,7 +11,11 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  }
+};
 </script>
 <style>
 @media (min-width: 992px) {

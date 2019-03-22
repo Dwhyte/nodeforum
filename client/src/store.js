@@ -15,7 +15,8 @@ export default new Vuex.Store({
     currentUser: {},
     loginErrors: {},
     registerErrors: {},
-    threads: {}
+    threads: {},
+    thread: {}
   },
   mutations: {
     setCurrentUser(state, user){
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     setThreads(state, threads){
       state.threads = threads
+    },
+    setSingleThread(state, thread) {
+      state.thread = thread
     }
   },
   getters: {
@@ -57,6 +61,9 @@ export default new Vuex.Store({
     },
     getThreads(state) {
       return state.threads
+    },
+    getSingleThread(state) {
+      return state.thread
     }
   },
   actions: {
@@ -137,6 +144,16 @@ export default new Vuex.Store({
      } catch (error) {
         commit('setThreads', {})
      }
+    },
+
+    // Get A Single Thread by Slug
+    async GetSingleThread({commit, dispatch}, slug) {
+      try {
+        const response = await axios.get(`/api/v1/threads/${slug}`);
+        commit('setSingleThread', response.data);
+      } catch (error) {
+        commit('setSingleThread', {})
+      }
     }
   }
 })
