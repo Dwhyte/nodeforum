@@ -17,7 +17,8 @@ export default new Vuex.Store({
     registerErrors: {},
     threads: {},
     thread: {},
-    categories: {}
+    categories: {},
+    profile: {}
   },
   mutations: {
     setLoader(state, loader) {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     },
     setCatNames(state, cats) {
       state.categories = cats
+    },
+    setUserProfile(state, user) {
+      state.profile = user
     }
   },
   getters: {
@@ -79,6 +83,9 @@ export default new Vuex.Store({
     },
     getCategoryNames(state) {
       return state.categories
+    },
+    getSingleProfile(state) {
+      return state.profile
     }
   },
   actions: {
@@ -195,6 +202,17 @@ export default new Vuex.Store({
         commit('setSingleThread', response.data);
       } catch (error) {
         commit('setSingleThread', {})
+      }
+    },
+
+    // Get A Single User Profile
+    async GetSingleUserProfile({commit}, username) {
+      try {
+        commit('setLoader', true);
+        const response = await axios.get(`/api/v1/u/${username}`);
+        commit('setUserProfile', response.data)
+      } catch (error) {
+        commit('setUserProfile', {})
       }
     }
   }

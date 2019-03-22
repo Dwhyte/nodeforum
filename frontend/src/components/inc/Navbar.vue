@@ -2,7 +2,7 @@
   <div>
     <nav
       class="navbar navbar-expand-md navbar-dark forum-nav fixed-top"
-      :class="{ 'forum-nav-hide': $route.path == '/login' || $route.path == '/register' }"
+      :class="{ 'forum-nav-hide': $route.path == '/login' || $route.path == '/register'}"
     >
       <router-link to="/">
         <a class="navbar-brand">Node Forum</a>
@@ -41,7 +41,12 @@
                 <img v-if="isAuth" class="avatar" :src="currentUser.avatar">
               </a>
               <div class="dropdown-menu profile-dropdown" aria-labelledby="dropdown01">
-                <router-link v-if="isAuth" to="/profile" activeClass="active" tag="li">
+                <router-link
+                  v-if="isAuth"
+                  :to="`/u/${currentUser.username}`"
+                  activeClass="active"
+                  tag="li"
+                >
                   <a class="dropdown-item">Profile</a>
                 </router-link>
                 <!-- <li>

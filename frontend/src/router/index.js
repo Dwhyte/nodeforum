@@ -6,6 +6,8 @@ import Login from '../components/auth/Login.vue'
 import Register from '../components/auth/Register.vue'
 import SingleThread from '../components/pages/threads/SingleThread.vue'
 import CreateThread from '../components/pages/threads/CreateThread.vue'
+import Profile from '../components/pages/user/Profile.vue'
+import ProfileSettings from '../components/pages/user/ProfileSettings.vue'
 
 Vue.use(Router)
 
@@ -23,11 +25,6 @@ export default new Router({
       path: '/category/:category',
       name: 'Landing',
       component: Landing,
-      // children: [
-      //   {
-
-      //   }
-      // ]
     },
     {
       path: '/login',
@@ -56,6 +53,23 @@ export default new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/u/:username',
+      component: Profile,
+      meta: {
+        bodyClass: 'body-profile-padding'
+      },
+      children: [
+        {
+          name: 'UserSettings',
+          path: '/settings',
+          component: ProfileSettings,
+          meta: {
+            requiresAuth: true
+          },
+        }
+      ]
     }
   ]
 })

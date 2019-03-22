@@ -1,8 +1,13 @@
 <template>
-  <div id="threads-section" class="col-lg-10 ml-auto mr-auto">
+  <div id="threads-section" class="col-lg-11 ml-auto mr-auto">
     <div class="mb-4">
-      <div class="loading" v-if="loading">Loading...</div>
-      <ul v-else class="list-unstyled" v-for="thread in threads.Threads" :key="thread.id">
+      <div class="loading text-center" v-if="loading">Loading...</div>
+      <ul
+        v-else
+        class="list-unstyled"
+        v-for="thread in threads.Threads || threads.threads"
+        :key="thread.id"
+      >
         <li class="threadblock-norm thread mb-4">
           <div class="thread-title">
             <router-link
@@ -23,6 +28,9 @@
           </div>
         </li>
       </ul>
+      <div v-if="threads === 'Threads does not exists for this category'">
+        <h4 class="text-center">No Threads</h4>
+      </div>
     </div>
   </div>
 </template>

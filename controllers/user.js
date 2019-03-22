@@ -63,11 +63,39 @@ exports.upload = {
 }
 
 
+// @route   GET api/u/:username
+// @desc    Get User data by username params
+// @access  Public
+// (public route)
+exports.getUser = async (req, res, next) => {
+  try {
+    let user = await User.findOne({
+      where: {
+        username: req.params.username
+      }
+    });
+
+    if(!user) {
+      return res.status(400).json({userNotFound: 'User Not Found'});
+    } else {
+      user.encryptedPassword = undefined;
+      return res.json({success: true, user })
+    }
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
+
+
 // @route   POST api/u/update/avatar
 // @desc    Add/Update user avatar image
 // @access  Private 
 // (protected Route)
-exports.updateUserAvatar = async (req, res) => {
+exports.updateUserAvatar = async (req, res, next) => {
   try {
     console.log(req.file) // see what is in file upload
     const image = {};
@@ -101,7 +129,7 @@ exports.updateUserAvatar = async (req, res) => {
 // @desc    Add/Update user cover image
 // @access  Private 
 // (protected Route)
-exports.updateUserCover = async (req, res) => {
+exports.updateUserCover = async (req, res, next) => {
   try {
     console.log(req.file) // see what is in file upload
     const image = {};
@@ -159,7 +187,7 @@ exports.updateUserDescription = async (req, res, next) => {
 // @desc    Reset user's password
 // @access  Private 
 // (protected Route)
-exports.updateUserPassword = async (req, res) => {
+exports.updateUserPassword = async (req, res, next) => {
   try {
     const newPassword = req.body.password;
     const salt = bcrypt.genSaltSync(10);

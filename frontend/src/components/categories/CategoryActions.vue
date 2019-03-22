@@ -6,11 +6,13 @@
           <button
             @click.prevent="updateNav('all')"
             class="btn btn-link btn-outline-claim btn-sm text-uppercase font-weight-bold"
+            :class="{ 'catActive': $route.path == `/category/all` }"
           >ALL</button>
         </li>
         <li class="mb-3" v-for="category in catData.categories" :key="category.id">
           <button
             class="btn btn-link btn-outline-claim btn-sm text-uppercase font-weight-bold"
+            :class="{ 'catActive': $route.path == `/category/${category.name}` }"
             @click.prevent="updateNav(category.name)"
           >{{ category.value }}</button>
         </li>
@@ -73,5 +75,16 @@ export default {
 .thread-sticky-side-menu .cat-box .btn.btn-link:hover {
   text-decoration: none;
   color: #ffffff;
+}
+
+.catActive {
+  color: #ffffff !important;
+  background-color: #536eec;
+  border-color: #536eec;
+  text-decoration: none;
+}
+
+.catActive:focus {
+  text-decoration: none;
 }
 </style>

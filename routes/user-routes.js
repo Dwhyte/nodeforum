@@ -4,6 +4,9 @@ const UserController = require('../controllers/user');
 const router = express.Router();
 
 
+// api/u/:username => GET
+router.get('/:username', UserController.getUser);
+
 
 // api/u/update/avatar => POST
 router.post('/update/avatar', passport.authenticate('jwt', {

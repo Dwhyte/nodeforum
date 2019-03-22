@@ -54,7 +54,7 @@ const authRoutes = require('./routes/auth-routes');
 app.use('/api', authRoutes);
 
 const userRoutes = require('./routes/user-routes');
-app.use('/api/u/', userRoutes);
+app.use('/api/v1/u/', userRoutes);
 
 const threadRoutes = require('./routes/thread-routes');
 app.use('/api/v1/threads', threadRoutes);
