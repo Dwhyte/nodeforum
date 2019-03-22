@@ -51,14 +51,17 @@ exports.postThread = async (req, res, next) => {
         // Return errors with 400 status
         return res.status(400).json(errors);
       }
-      const slug = urlSlug(req.body.name);
-      const name = req.body.name;
-      const catId = req.body.categoryId;
+      // const name = req.body.name;
+      // const catId = req.body.categoryId;
+      
+    const slug = urlSlug(req.body.name);
+    const { name, categoryId, content } = req.body
   
      await req.user.createThread({
         slug: slug,
         name: name,
-        categoryId: catId
+        categoryId: categoryId,
+        content: content
       })
 
       res.json({ success: true, message: 'Thread Created!'})
