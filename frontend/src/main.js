@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // if logged in redirect to profile
+  // if logged in redirect to landing
   if (to.path === '/login' && store.state.isAuthenticated) {
     next({
       name: 'Landing',

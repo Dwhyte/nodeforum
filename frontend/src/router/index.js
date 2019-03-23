@@ -59,17 +59,15 @@ export default new Router({
       component: Profile,
       meta: {
         bodyClass: 'body-profile-padding'
+      }
+    },
+    {
+      path: '/u/:username/settings',
+      name: 'UserSettings',
+      component: ProfileSettings,
+      meta: {
+        requiresAuth: true
       },
-      children: [
-        {
-          name: 'UserSettings',
-          path: '/settings',
-          component: ProfileSettings,
-          meta: {
-            requiresAuth: true
-          },
-        }
-      ]
     }
   ]
 })

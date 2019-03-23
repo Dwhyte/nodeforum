@@ -49,9 +49,11 @@
                 >
                   <a class="dropdown-item">Profile</a>
                 </router-link>
-                <!-- <li>
-                  <a href v-if="isAuth" class="dropdown-item" @click="onLogout">Logout</a>
-                </li>-->
+                <li>
+                  <router-link :to="`/u/${currentUser.username}/settings`">
+                    <a class="dropdown-item">Settings</a>
+                  </router-link>
+                </li>
                 <li>
                   <button
                     v-if="isAuth"
