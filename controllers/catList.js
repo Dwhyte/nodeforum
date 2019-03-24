@@ -1,6 +1,8 @@
 // Load Models
 const Category = require('../models/category-model');
 
+// Load Validations
+const validateCategoryInput = require('../validation/category');
 
 
 // @route   Post api/category/

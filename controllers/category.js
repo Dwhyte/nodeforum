@@ -5,7 +5,7 @@ const Thread = require('../models/thread-model');
 const Post = require('../models/post-model');
 
 // Load Validation
-const validateCategoryInput = require('../validation/thread');
+const validateCategoryInput = require('../validation/category');
 
 
 // @route   GET api/categories/:category
