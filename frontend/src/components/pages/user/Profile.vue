@@ -3,18 +3,58 @@
     <div v-if="isEdit" class="profilePage-editingOverlay"></div>
     <div id="about" class="container">
       <div class="row header">
-        <div
-          class="col-lg-12 bgcover-area"
-          :style="{ 'background-image': `url(${Profile.user.cover})` }"
-        >
-          <a v-show="isEdit" class="settings-overlay-cover" style>
-            <span class="overlay-text">
-              <i class="fas fa-camera-retro"></i>
-              <h6 style="font-size: 15px;">Update your background cover</h6>
-            </span>
-          </a>
-          <div class="background"></div>
+        <div class="col-lg-12 column">
+          <div class="cover">
+            <label for="cover-input" style="display: inline;">
+              <a v-show="isEdit" class="settings-overlay-cover">
+                <span class="overlay-text">
+                  <h6 style="font-size: 15px;">Update your background cover</h6>
+                </span>
+              </a>
+            </label>
+            <div
+              class="background"
+              v-bind:style="{ 'background-image': `url(${Profile.user.cover})` }"
+            ></div>
+            <div
+              v-if="previewCoverUrl"
+              class="background previewCoverUrl"
+              v-bind:style="{ 'background-image': 'url( ' + previewCoverUrl + ')' }"
+            ></div>
+            <input
+              id="cover-input"
+              type="file"
+              @change="onCoverChange"
+              class="form-control"
+              style="display: none;"
+            >
+          </div>
         </div>
+
+        <!-- <div class="col-lg-12 cover">
+          <label for="cover-input" style="display: inline;">
+            <a v-show="isEdit" class="settings-overlay-cover" style>
+              <span class="overlay-text">
+                <i class="fas fa-camera-retro"></i>
+                <h6 style="font-size: 15px;">Update your background cover</h6>
+              </span>
+            </a>
+          </label>
+          <div class="bgcover-area" :style="{ 'background-image': `url(${Profile.user.cover})` }"></div>
+          <div
+            v-if="previewCoverUrl"
+            class="background previewCoverUrl"
+            v-bind:style="{ 'background-image': 'url( ' + previewCoverUrl + ')' }"
+          ></div>
+          <input
+            id="cover-input"
+            type="file"
+            @change="onCoverChange"
+            class="form-control"
+            style="display: none;"
+          >
+          <div class="background"></div>
+        </div>-->
       </div>
       <div class="row menu">
         <div class="col-lg-12 userdetail-area">
@@ -165,14 +205,19 @@ export default {
 };
 </script>
 <style>
-#profile > #about > .row.header > .bgcover-area > .background {
+#profile .header > .column {
+  padding: 0;
+}
+
+#profile .background {
   height: 465px;
   width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
+  z-index: 1;
 }
 
-#profile > #about > .row.header > .bgcover-area > .background:after {
+#profile > #about > .row.header > .cover > .background:after {
   content: "";
   position: absolute;
   top: 0;
@@ -316,6 +361,14 @@ export default {
   left: 0px;
 }
 
+.previewCoverUrl {
+  position: absolute;
+  top: 0px;
+  width: 100% !important;
+  z-index: 0;
+  left: 0px;
+}
+
 .settings-overlay-cover:hover {
   background-color: rgba(222, 220, 220, 0.04);
 }
@@ -362,6 +415,14 @@ span.edit {
   transition: all 0.2s ease;
 }
 
+span.edit:hover {
+  background-color: transparent;
+  background-image: none;
+  border: 2px solid #536eec;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  text-decoration: none;
+}
+
 .actions .cancel {
   padding: 8px 40px !important;
   font-size: 12px;
@@ -376,5 +437,15 @@ span.edit {
   border: 2px solid #9e9e9e;
   z-index: 1;
   position: absolute;
+}
+
+.actions .cancel:hover {
+  background: transparent !important;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  text-decoration: none;
+  border: 2px solid #a3a6b1;
 }
 </style>
