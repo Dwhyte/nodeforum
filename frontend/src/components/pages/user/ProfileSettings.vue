@@ -110,6 +110,6 @@ export default {
 #settings #appearance-form label .header {
   margin-top: 1rem;
   height: 150px;
-  border: 4px solid #fff;
+  border: 4px solid #0b112d;
 }
 </style>

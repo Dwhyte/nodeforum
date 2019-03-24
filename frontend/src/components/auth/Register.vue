@@ -114,7 +114,7 @@ export default {
 
 #auth-view.register .splash-bg {
   width: 100%;
-  background-image: url("https://res.cloudinary.com/duzsc1kx7/image/upload/v1553023841/gerry-roarty-106734-unsplash_qx9sll.jpg");
+  background-image: url("~@/assets/register_splash_img.jpg");
   background-position: center;
   background-size: cover;
   height: 100vh;

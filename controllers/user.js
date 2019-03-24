@@ -55,11 +55,14 @@ const coverParser = multer({
   }
 });
 
+
 const uploadCover = multer().single('cover');
+
+
 
 exports.upload = {
   avatarParser,
-  coverParser
+  coverParser,
 }
 
 
@@ -120,7 +123,6 @@ exports.updateUserAvatar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 };
 
 
@@ -230,3 +232,33 @@ exports.removeUser = async (req, res) => {
     next(error);
   }
 };
+
+
+
+
+// exports.updateUserProfile = async (req, res, next) => {
+//   try {
+//     let user = await User.findByPk(req.user.id);
+
+//     console.log(req.files);
+//     const { description } = req.body
+
+//     if (!user) {
+//      return res.status(400).json({message: 'User Not Found'});
+//     } 
+
+//     await user.update({
+//       description : description,
+//       avatar: req.files.avatar[0].secure_url,
+//       cover: req.files.cover[0].secure_url
+//     })
+//     res.json({
+//       uploadedAvatar: req.files.avatar[0].secure_url,
+//       uploadedCover: req.files.cover[0].secure_url,
+//       description : user.description
+//     });
+
+//   } catch (error) {
+//     next(error);
+//   }
+// }

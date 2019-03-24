@@ -8,6 +8,11 @@ const router = express.Router();
 router.get('/:username', UserController.getUser);
 
 
+// // api/u/update => POST
+// router.post('/update', passport.authenticate('jwt', {
+//   session: false
+// }), UserController.upload.imageUpload, UserController.updateUserProfile);
+
 // api/u/update/avatar => POST
 router.post('/update/avatar', passport.authenticate('jwt', {
   session: false

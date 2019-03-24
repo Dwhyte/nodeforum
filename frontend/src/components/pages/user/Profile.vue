@@ -1,11 +1,18 @@
 <template>
   <div id="profile" v-if="Profile.user">
+    <div v-if="isEdit" class="profilePage-editingOverlay"></div>
     <div id="about" class="container">
       <div class="row header">
         <div
           class="col-lg-12 bgcover-area"
           :style="{ 'background-image': `url(${Profile.user.cover})` }"
         >
+          <a v-show="isEdit" class="settings-overlay-cover" style>
+            <span class="overlay-text">
+              <i class="fas fa-camera-retro"></i>
+              <h6 style="font-size: 15px;">Update your background cover</h6>
+            </span>
+          </a>
           <div class="background"></div>
         </div>
       </div>
@@ -19,7 +26,30 @@
             </p>
           </div>
           <div class="avatar">
+            <label for="avatar-input">
+              <a v-show="isEdit" class="settings-overlay-button">
+                <span class="overlay-text">
+                  <i class="fas fa-camera-retro"></i>
+                  <h6 style="font-size: 15px;">
+                    <p>Update</p>
+                    <p>Avatar</p>
+                  </h6>
+                </span>
+              </a>
+            </label>
             <img :src="Profile.user.avatar" alt="Avatar image">
+            <img
+              v-if="previewAvatarUrl"
+              :src="previewAvatarUrl"
+              style="position: absolute;left: 0px;z-index: 1;"
+            >
+            <input
+              id="avatar-input"
+              type="file"
+              @change="onImageChange"
+              class="form-control"
+              style="display: none;"
+            >
           </div>
           <div class="actions">
             <a class="item">
@@ -34,6 +64,17 @@
                 <div class="label">following</div>
               </div>
             </a>
+            <span
+              v-if="authUser.username == routeName && isEdit == true"
+              @click="cancelChanges"
+              class="cancel btn btn-link btn-outline-claim btn-sm text-uppercase font-weight-bold"
+            >Cancel</span>
+            <span
+              v-if="authUser.username == routeName"
+              @click="isEdit = !isEdit"
+              v-show="!isEdit"
+              class="edit selected btn btn-link btn-outline-claim btn-sm text-uppercase font-weight-bold catActive"
+            >Edit</span>
           </div>
         </div>
       </div>
@@ -44,7 +85,17 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      routeName: this.$route.params.username,
+      isEdit: false,
+      image: null,
+      cover: null,
+      bio: null,
+      name: null,
+      previewAvatarUrl: null,
+      previewCoverUrl: null,
+      textInputField: false
+    };
   },
   mounted() {
     this.getUser();
@@ -53,6 +104,11 @@ export default {
     $route: "getUser"
   },
   computed: {
+    authUser() {
+      return !this.$store.getters.currentUser
+        ? false
+        : this.$store.getters.currentUser;
+    },
     Profile() {
       return !this.$store.getters.getSingleProfile
         ? false
@@ -61,7 +117,49 @@ export default {
   },
   methods: {
     getUser() {
-      this.$store.dispatch("GetSingleUserProfile", this.$route.params.username);
+      this.$store.dispatch("GetSingleUserProfile", this.routeName);
+    },
+    onImageChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = e => {
+        vm.image = e.target.result;
+      };
+      this.previewAvatarUrl = URL.createObjectURL(file);
+      reader.readAsDataURL(file);
+    },
+    onCoverChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createCover(files[0]);
+    },
+    createCover(file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = e => {
+        vm.cover = e.target.result;
+      };
+      this.previewCoverUrl = URL.createObjectURL(file);
+      reader.readAsDataURL(file);
+    },
+    uploadAvatarUpload() {},
+    cancelAvatarUpload() {},
+    uploadCoverUpload() {},
+    cancelCoverUpload() {},
+    cancelChanges() {
+      this.isEdit = false;
+      this.previewAvatarUrl = null;
+      this.previewCoverUrl = null;
+      this.image = null;
+      this.cover = null;
+      this.name = null;
+      this.bio = null;
+      this.textInputField = false;
     }
   }
 };
@@ -127,10 +225,10 @@ export default {
   left: 100px;
   top: -135px;
   z-index: 2;
-  border-radius: 4px;
-  border: 4px solid #252b50;
   width: 175px;
   height: 175px;
+  border-radius: 999em;
+  border: 4px solid #5247c3;
 }
 
 #profile > #about > .row.menu > .userdetail-area .avatar,
@@ -142,6 +240,7 @@ export default {
 #profile > #about > .row.menu > .userdetail-area .avatar img {
   width: 100%;
   height: 100%;
+  border-radius: 999em;
 }
 
 #profile > #about > .row.menu > .userdetail-area .actions {
@@ -155,7 +254,8 @@ export default {
   padding-right: 100px;
   width: 100%;
   height: 50px;
-  background: #171e46;
+  background: #182231;
+  border-top: 2px solid #5247c3;
 }
 
 #profile > #about > .row.menu > .userdetail-area .actions .item {
@@ -187,5 +287,94 @@ export default {
 
 #profile > #about > .row.menu > .userdetail-area .actions .item > .stat .label {
   font-family: "Open Sans Condensed", Helvetica, sans-serif;
+}
+
+.profilePage-editingOverlay {
+  background-color: #253446;
+  bottom: 0;
+  display: block;
+  left: 0;
+  opacity: 0.8;
+  -ms-filter: "alpha(opacity=80)";
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.settings-overlay-cover {
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(6, 0, 84, 0.41);
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+  border: 2px solid #0b1549;
+  left: 0px;
+}
+
+.settings-overlay-cover:hover {
+  background-color: rgba(222, 220, 220, 0.04);
+}
+
+.settings-overlay-button {
+  position: absolute;
+  top: 0;
+  background-color: rgba(6, 0, 84, 0.41);
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+  border-radius: 50%;
+  border: 2px solid #0b1549;
+  z-index: 1;
+}
+
+.settings-overlay-button:hover {
+  background-color: rgba(222, 220, 220, 0.04);
+}
+
+.overlay-text {
+  position: relative;
+  display: block;
+  height: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+}
+
+.overlay-text h6 p {
+  margin-bottom: 0;
+}
+
+span.edit {
+  position: absolute;
+  right: 48px;
+  padding: 8px 40px !important;
+  font-size: 12px;
+  border-radius: 5px;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.actions .cancel {
+  padding: 8px 40px !important;
+  font-size: 12px;
+  border-radius: 5px;
+  letter-spacing: 0.05em;
+  right: 174px !important;
+  background: #7a7b80 !important;
+  box-shadow: 0 0 0 0 rgb(82, 71, 195);
+  border: none;
+  color: #fff;
+  transition: right 10s linear;
+  border: 2px solid #9e9e9e;
+  z-index: 1;
+  position: absolute;
 }
 </style>

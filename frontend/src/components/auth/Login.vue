@@ -98,7 +98,7 @@ export default {
 
 #auth-view.login .splash-bg {
   width: 100%;
-  background-image: url("https://res.cloudinary.com/duzsc1kx7/image/upload/v1553023074/josh-wilburne-114305-unsplash_p8ejcz.jpg");
+  background-image: url("~@/assets/login_splash_img.jpg");
   background-position: center;
   background-size: cover;
   height: 100vh;

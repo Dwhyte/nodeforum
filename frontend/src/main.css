@@ -125,9 +125,10 @@ a:hover {
 }
 
 .navbar .avatar {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 16%;
+  border-radius: 999em;
 }
 
 .navbar .name {
