@@ -21,6 +21,12 @@
               class="background previewCoverUrl"
               v-bind:style="{ 'background-image': 'url( ' + previewCoverUrl + ')' }"
             ></div>
+            <div v-if="previewCoverUrl" class="savecover">
+              <span
+                class="btn btn-link btn-green btn-sm text-uppercase font-weight-bold"
+                @click="uploadCoverUpload"
+              >Update Cover</span>
+            </div>
             <input
               id="cover-input"
               type="file"
@@ -30,31 +36,6 @@
             >
           </div>
         </div>
-
-        <!-- <div class="col-lg-12 cover">
-          <label for="cover-input" style="display: inline;">
-            <a v-show="isEdit" class="settings-overlay-cover" style>
-              <span class="overlay-text">
-                <i class="fas fa-camera-retro"></i>
-                <h6 style="font-size: 15px;">Update your background cover</h6>
-              </span>
-            </a>
-          </label>
-          <div class="bgcover-area" :style="{ 'background-image': `url(${Profile.user.cover})` }"></div>
-          <div
-            v-if="previewCoverUrl"
-            class="background previewCoverUrl"
-            v-bind:style="{ 'background-image': 'url( ' + previewCoverUrl + ')' }"
-          ></div>
-          <input
-            id="cover-input"
-            type="file"
-            @change="onCoverChange"
-            class="form-control"
-            style="display: none;"
-          >
-          <div class="background"></div>
-        </div>-->
       </div>
       <div class="row menu">
         <div class="col-lg-12 userdetail-area">
@@ -83,6 +64,12 @@
               :src="previewAvatarUrl"
               style="position: absolute;left: 0px;z-index: 1;"
             >
+            <div v-if="previewAvatarUrl" class="savecover">
+              <span
+                class="btn btn-link btn-green btn-sm text-uppercase font-weight-bold"
+                @click="uploadAvatarUpload"
+              >Update Avatar</span>
+            </div>
             <input
               id="avatar-input"
               type="file"
@@ -123,6 +110,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -159,17 +147,21 @@ export default {
     getUser() {
       this.$store.dispatch("GetSingleUserProfile", this.routeName);
     },
+
+    getCurrentAuthUser() {
+      this.$store.dispatch("getCurrentUser");
+    },
+
     onImageChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createImage(files[0]);
+      this.avatar = e.target.files[0];
+      console.log(files[0]);
     },
     createImage(file) {
       let reader = new FileReader();
       let vm = this;
-      reader.onload = e => {
-        vm.image = e.target.result;
-      };
       this.previewAvatarUrl = URL.createObjectURL(file);
       reader.readAsDataURL(file);
     },
@@ -177,20 +169,55 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createCover(files[0]);
+      this.cover = e.target.files[0];
+      console.log(files[0]);
     },
     createCover(file) {
       let reader = new FileReader();
       let vm = this;
-      reader.onload = e => {
-        vm.cover = e.target.result;
-      };
       this.previewCoverUrl = URL.createObjectURL(file);
       reader.readAsDataURL(file);
     },
-    uploadAvatarUpload() {},
-    cancelAvatarUpload() {},
-    uploadCoverUpload() {},
-    cancelCoverUpload() {},
+    uploadAvatarUpload() {
+      const formData = new FormData();
+      formData.append("avatar", this.avatar, this.avatar.name);
+      axios
+        .post("/api/v1/u/update/avatar", formData)
+        .then(res => {
+          console.log(res);
+          this.getUser();
+          this.getCurrentAuthUser();
+          this.avatar = null;
+          this.previewAvatarUrl = null;
+        })
+        .then(console.log("Avatar Uploaded"), (this.avatar = null))
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    uploadCoverUpload() {
+      const formData = new FormData();
+      formData.append("cover", this.cover, this.cover.name);
+      axios
+        .post("/api/v1/u/update/cover", formData)
+        .then(res => {
+          console.log(res);
+          this.getUser();
+          this.getCurrentAuthUser();
+          this.cover = null;
+          this.previewCoverUrl = null;
+        })
+        .then(console.log("Cover Uploaded"), (this.cover = null))
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    cancelAvatarUpload() {
+      this.avatar = null;
+    },
+    cancelCoverUpload() {
+      this.cover = null;
+    },
     cancelChanges() {
       this.isEdit = false;
       this.previewAvatarUrl = null;
@@ -200,6 +227,7 @@ export default {
       this.name = null;
       this.bio = null;
       this.textInputField = false;
+      this.getUser();
     }
   }
 };
@@ -447,5 +475,12 @@ span.edit:hover {
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
   text-decoration: none;
   border: 2px solid #a3a6b1;
+}
+
+.savecover {
+  z-index: 2;
+  position: absolute;
+  top: 56%;
+  right: 44%;
 }
 </style>

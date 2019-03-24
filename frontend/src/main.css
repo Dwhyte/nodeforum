@@ -93,6 +93,19 @@ a:hover {
   border-color: #f75679;
 }
 
+.btn-green {
+  color: #ffffff !important;
+  background-color: #42b52e;
+  border: #42b52e 2px solid;
+  text-decoration: none;
+}
+
+.btn-green:hover {
+  background-color: transparent;
+  border: #42b52e 2px solid;
+  text-decoration: none;
+}
+
 .font-weight-bold {
   font-weight: 600 !important;
 }

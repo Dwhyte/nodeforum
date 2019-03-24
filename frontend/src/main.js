@@ -15,6 +15,7 @@ import VueTruncate from 'vue-truncate-filter'
 import vbclass from 'vue-body-class'
 
 
+
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = process.env.VUE_APP_DEVURL
@@ -29,7 +30,8 @@ if (localStorage.jwtToken) {
   const decoded = jwt_decode(localStorage.jwtToken);
   // Set user and isAuthenticated
   // store.commit('setCurrentUser', decoded);
-  store.dispatch('setCurrentUser', decoded);
+  // store.dispatch('setCurrentUser', decoded);
+  store.dispatch('getCurrentUser')
 
   // check for expired token
   const currentTime = Date.now() / 1000;

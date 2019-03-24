@@ -18,7 +18,8 @@ export default new Vuex.Store({
     threads: {},
     thread: {},
     categories: {},
-    profile: {}
+    profile: {},
+    errors: {}
   },
   mutations: {
     setLoader(state, loader) {
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     },
     setUserProfile(state, user) {
       state.profile = user
+    },
+    setErrors(state, error) {
+      state.errors = error
     }
   },
   getters: {
@@ -86,6 +90,9 @@ export default new Vuex.Store({
     },
     getSingleProfile(state) {
       return state.profile
+    },
+    getErrors(state) {
+      return state.errors
     }
   },
   actions: {
@@ -170,6 +177,18 @@ export default new Vuex.Store({
       });
     },
 
+
+    // Get Current User
+    async getCurrentUser({commit}) {
+      try {
+        const response = await axios.get('/api/currentUser')
+        commit('setCurrentUser', response.data)
+      } catch (error) {
+        commit('setErrors', error.response.data)
+      }
+    },
+
+
     // Get All Category Names
     async GetCategoryNames({commit}) {
       try {
@@ -213,6 +232,31 @@ export default new Vuex.Store({
         commit('setUserProfile', response.data)
       } catch (error) {
         commit('setUserProfile', {})
+      }
+    },
+
+    // Update User Background Cover
+    async updateUserCover({commit}, coverImage) {
+      try {
+        commit('setLoader', true);
+        await axios.post('/api/v1/u/update/cover', {
+          cover: coverImage.cover
+        });
+      } catch (error) {
+        commit('setErrors', error.response.data)
+      }
+    },
+
+
+    // Update User Avatar
+    async updateUserAvatar({commit}, avatarImage) {
+      try {
+        commit('setLoader', true);
+        await axios.post('/api/v1/u/update/avatar', {
+          avatar: avatarImage.avatar
+        });
+      } catch (error) {
+        commit('setErrors', error.response.data)
       }
     }
   }
