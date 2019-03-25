@@ -23,7 +23,7 @@
             ></div>
             <div v-if="previewCoverUrl" class="savecover">
               <span
-                class="btn btn-link btn-green btn-sm text-uppercase font-weight-bold"
+                class="btn btn-link pulse-button btn-sm text-uppercase font-weight-bold"
                 @click="uploadCoverUpload"
               >Update Cover</span>
             </div>
@@ -66,7 +66,7 @@
             >
             <div v-if="previewAvatarUrl" class="savecover">
               <span
-                class="btn btn-link btn-green btn-sm text-uppercase font-weight-bold"
+                class="btn btn-link pulse-button btn-sm text-uppercase font-weight-bold"
                 @click="uploadAvatarUpload"
               >Update Avatar</span>
             </div>
@@ -199,7 +199,15 @@ export default {
       const formData = new FormData();
       formData.append("cover", this.cover, this.cover.name);
       axios
-        .post("/api/v1/u/update/cover", formData)
+        .post("/api/v1/u/update/cover", formData, {
+          onUploadProgress: uploadEvent => {
+            console.log(
+              "Upload Progress: " +
+                Math.round((uploadEvent.loaded / uploadEvent.total) * 100) +
+                "%"
+            );
+          }
+        })
         .then(res => {
           console.log(res);
           this.getUser();
@@ -378,7 +386,7 @@ export default {
 .settings-overlay-cover {
   position: absolute;
   z-index: 2;
-  background-color: rgba(6, 0, 84, 0.41);
+  background-color: rgba(40, 31, 181, 0.02);
   display: block;
   width: 100%;
   height: 100%;
@@ -482,5 +490,34 @@ span.edit:hover {
   position: absolute;
   top: 56%;
   right: 44%;
+}
+
+#profile > #about > .row.menu > .userdetail-area .avatar .pulse-button {
+  color: #fff;
+  font-size: 12px;
+  position: absolute;
+  right: -39px;
+  top: 87px;
+  letter-spacing: 0.05em;
+  border: 2px solid #6253ff;
+  box-shadow: 0 0 0 0 rgb(82, 71, 195);
+  border-radius: 5px;
+  background-color: #5247c3;
+  cursor: pointer;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+#profile .cover .pulse-button {
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  border: 2px solid #6253ff;
+  box-shadow: 0 0 0 0 rgb(82, 71, 195);
+  border-radius: 5px;
+  background-color: #5247c3;
+  cursor: pointer;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 </style>

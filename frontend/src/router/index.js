@@ -7,7 +7,8 @@ import Register from '../components/auth/Register.vue'
 import SingleThread from '../components/pages/threads/SingleThread.vue'
 import CreateThread from '../components/pages/threads/CreateThread.vue'
 import Profile from '../components/pages/user/Profile.vue'
-import ProfileSettings from '../components/pages/user/ProfileSettings.vue'
+// import ProfileSettings from '../components/pages/user/ProfileSettings.vue'
+import Settings from '../components/pages/user/Settings.vue'
 
 Vue.use(Router)
 
@@ -64,7 +65,7 @@ export default new Router({
     {
       path: '/u/:username/settings',
       name: 'UserSettings',
-      component: ProfileSettings,
+      component: Settings,
       meta: {
         requiresAuth: true
       },
