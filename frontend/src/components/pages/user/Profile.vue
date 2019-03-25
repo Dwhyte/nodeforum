@@ -14,7 +14,7 @@
             </label>
             <div
               class="background"
-              v-bind:style="{ 'background-image': `url(${Profile.user.cover})` }"
+              :style="[Profile.user.cover ? { 'background-image': `url(${Profile.user.cover})`} : {'background-image': `url('${require(`@/assets/header_default.jpg`)}')`}]"
             ></div>
             <div
               v-if="previewCoverUrl"
@@ -58,7 +58,12 @@
                 </span>
               </a>
             </label>
-            <img :src="Profile.user.avatar" alt="Avatar image">
+            <img
+              v-if="!Profile.user.avatar"
+              :src="`${require(`@/assets/default_avatar.png`)}`"
+              alt="default avatar"
+            >
+            <img v-if="Profile.user.avatar" :src="Profile.user.avatar" alt="Avatar image">
             <img
               v-if="previewAvatarUrl"
               :src="previewAvatarUrl"
@@ -110,7 +115,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 export default {
   metaInfo() {
     return {
@@ -186,7 +190,7 @@ export default {
     uploadAvatarUpload() {
       const formData = new FormData();
       formData.append("avatar", this.avatar, this.avatar.name);
-      axios
+      this.axios
         .post("/api/v1/u/update/avatar", formData)
         .then(res => {
           console.log(res);
@@ -203,7 +207,7 @@ export default {
     uploadCoverUpload() {
       const formData = new FormData();
       formData.append("cover", this.cover, this.cover.name);
-      axios
+      this.axios
         .post("/api/v1/u/update/cover", formData, {
           onUploadProgress: uploadEvent => {
             console.log(
@@ -258,14 +262,14 @@ export default {
   z-index: 1;
 }
 
-#profile > #about > .row.header > .cover > .background:after {
+#profile > #about .background:after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(23, 23, 23, 0.2);
+  background: rgba(23, 23, 23, 0.27);
 }
 
 #profile > #about > .row.menu {

@@ -28,6 +28,15 @@
             <router-link v-if="!isAuth" to="/register" activeClass="active" tag="li">
               <a class="nav-link">Register</a>
             </router-link>
+            <router-link
+              v-if="isAuth"
+              to="/thread/new"
+              class="btn btn-sm btn-outline-claim font-weight-bold text-uppercase mr-5"
+              style="height: 32px;margin-top: 10px;"
+            >Write A Post</router-link>
+            <li v-if="isAuth" style="height: 32px;margin-top: 14px;">
+              <span class="name font-weight-bold">Hello, {{ currentUser.username }}</span>
+            </li>
             <li v-if="isAuth" class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -37,8 +46,12 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <span class="name font-weight-bold">Hello, {{ currentUser.username }}</span>
-                <img v-if="isAuth" class="avatar" :src="currentUser.avatar">
+                <img
+                  v-if="isAuth && !currentUser.avatar"
+                  class="avatar"
+                  :src="`${require(`@/assets/default_avatar.png`)}`"
+                >
+                <img v-if="isAuth && currentUser.avatar" class="avatar" :src="currentUser.avatar">
               </a>
               <div class="dropdown-menu profile-dropdown" aria-labelledby="dropdown01">
                 <router-link
@@ -52,11 +65,6 @@
                 <li>
                   <router-link :to="`/u/${currentUser.username}/settings`">
                     <a class="dropdown-item">Settings</a>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/login">
-                    <a class="dropdown-item">Login</a>
                   </router-link>
                 </li>
                 <li>
@@ -103,6 +111,10 @@ export default {
  <style scoped>
 .dropdown-menu .btn.btn-link {
   box-shadow: none;
+}
+
+.navbar .dropdown-menu.profile-dropdown {
+  margin-left: -106px;
 }
 </style>
 

@@ -10,7 +10,7 @@
             v-if="isAuth"
             to="/thread/new"
             class="btn btn-sm btn-outline-claim font-weight-bold text-uppercase"
-          >Create A Thread</router-link>
+          >Write A Post</router-link>
 
           <router-link
             v-if="!isAuth"

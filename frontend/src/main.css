@@ -87,10 +87,14 @@ a:hover {
   border-color: #536eec;
 }
 
-.btn-danger {
+.btn-danger-outline {
   color: #fff;
-  background-color: #f75679;
-  border-color: #f75679;
+  border: 2px solid #E91E63;
+}
+
+.btn-danger-outline:hover{
+  color: #fff;
+  background-color: #E91E63;
 }
 
 .btn-green {

@@ -145,10 +145,7 @@ export default new Vuex.Store({
       .then(() => {
         // router.push('/login');
         router.push({
-        name: 'Landing',
-        params: {
-          category: 'all'
-        }
+        name: 'login',
       });
       })
       .catch(error => {
@@ -255,6 +252,21 @@ export default new Vuex.Store({
         await axios.post('/api/v1/u/update/avatar', {
           avatar: avatarImage.avatar
         });
+      } catch (error) {
+        commit('setErrors', error.response.data)
+      }
+    },
+
+
+    // Create a new Post
+    async CreateNewPost({commit}, newPostHtml) {
+      try {
+        commit('setLoader', true);
+        await axios.post('/api/v1/threads', {
+          name: newPostHtml.name,
+          content: newPostHtml.content,
+          categoryId: newPostHtml.categoryId,
+        })
       } catch (error) {
         commit('setErrors', error.response.data)
       }
