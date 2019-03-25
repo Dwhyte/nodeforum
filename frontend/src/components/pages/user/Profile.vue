@@ -112,6 +112,11 @@
 <script>
 import axios from "axios";
 export default {
+  metaInfo() {
+    return {
+      titleTemplate: `%s - ${this.routeName.toUpperCase()}`
+    };
+  },
   data() {
     return {
       routeName: this.$route.params.username,

@@ -55,6 +55,11 @@
                   </router-link>
                 </li>
                 <li>
+                  <router-link to="/login">
+                    <a class="dropdown-item">Login</a>
+                  </router-link>
+                </li>
+                <li>
                   <button
                     v-if="isAuth"
                     @click="onLogout"

@@ -13,6 +13,7 @@ import store from './store'
 import setAuthToken from './utils/setAuthToken'
 import VueTruncate from 'vue-truncate-filter'
 import vbclass from 'vue-body-class'
+import Meta from 'vue-meta'
 
 
 
@@ -30,7 +31,7 @@ if (localStorage.jwtToken) {
   const decoded = jwt_decode(localStorage.jwtToken);
   // Set user and isAuthenticated
   // store.commit('setCurrentUser', decoded);
-  // store.dispatch('setCurrentUser', decoded);
+  store.dispatch('setCurrentUser', decoded);
   store.dispatch('getCurrentUser')
 
   // check for expired token
@@ -104,6 +105,7 @@ router.beforeEach((to, from, next) => {
 Vue.use(VueTruncate)
 Vue.use(vbclass, router)
 Vue.use(require('vue-moment'));
+Vue.use(Meta)
 
 
 /* eslint-disable no-new */

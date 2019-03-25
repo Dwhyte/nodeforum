@@ -33,7 +33,14 @@ export default {
     CategoryActions
   },
   data() {
-    return {};
+    return {
+      routeName: this.$route.params.category
+    };
+  },
+  metaInfo() {
+    return {
+      titleTemplate: `%s - ${this.routeName.toUpperCase()}`
+    };
   },
   computed: {
     isAuth() {
