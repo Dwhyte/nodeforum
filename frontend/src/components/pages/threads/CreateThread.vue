@@ -43,7 +43,7 @@
             <a
               @click="createNewPost"
               class="btn btn-sm btn-outline-save font-weight-bold mt-3"
-            >Create New Thread</a>
+            >Upload Thread</a>
             <a
               @click="clearEditPost"
               style="float: right;"
@@ -134,5 +134,9 @@ export default {
 
 #newpost .save-area .btn-danger-outline:hover {
   color: #ffffff;
+}
+
+#newpost .editr--content {
+  background: #fff;
 }
 </style>

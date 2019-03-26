@@ -153,9 +153,9 @@ export default {
 }
 
 #settings .appearance-form input {
-  background-color: transparent;
+  background-color: #fff;
   padding: 11px;
-  border: 1px solid #dbdbdb;
+  border: 1px solid #33495f;
   border-radius: 2px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;

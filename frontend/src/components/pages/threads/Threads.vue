@@ -10,6 +10,22 @@
       >
         <li class="threadblock-norm thread mb-4">
           <div class="thread-title">
+            <router-link :to="`/u/${thread.user.username}`">
+              <img
+                v-if="!thread.user.avatar"
+                class="thread-avatar mr-3"
+                :src="`${require(`@/assets/default_avatar.png`)}`"
+                alt="Default avatar"
+                :title="thread.user.username"
+              >
+              <img
+                v-if="thread.user.avatar"
+                class="thread-avatar mr-3"
+                :src="thread.user.avatar"
+                :title="thread.user.username"
+                :alt="thread.user.username"
+              >
+            </router-link>
             <router-link
               :to="`/threads/${thread.slug}`"
               class="font-weight-bold"
@@ -80,6 +96,13 @@ export default {
   border: 1px solid #eef0f1;
 }
 
+.threadblock-norm:hover {
+  -webkit-box-shadow: 0 0 0.3rem hsla(0, 0%, 69%, 0.25),
+    0 0.2rem 0.35rem hsla(0, 0%, 69%, 0.25);
+  box-shadow: 0 0 0.3rem hsla(0, 0%, 69%, 0.25),
+    0 0.2rem 0.35rem hsla(0, 0%, 69%, 0.25);
+}
+
 .thread {
   font-size: 1.1rem;
   padding-left: 1.5rem;
@@ -95,9 +118,21 @@ export default {
   text-transform: capitalize;
 }
 
+.thread-title a:hover {
+  text-decoration: none;
+  color: #6e7c8a;
+}
+
 .thread-meta {
   font-size: 14px;
   display: inline-block;
   float: right;
+}
+
+.thread-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 16%;
+  border-radius: 999em;
 }
 </style>
