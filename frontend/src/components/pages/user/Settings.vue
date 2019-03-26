@@ -18,7 +18,7 @@
                       type="password"
                       class="form-control"
                       id="password-input"
-                      placeholder="xxxxxxxxxxx"
+                      placeholder
                       v-model="password"
                       v-show="!showPass"
                     >
@@ -26,7 +26,7 @@
                       type="text"
                       class="form-control"
                       id="password-input-text"
-                      placeholder="xxxxxxxxxxx"
+                      placeholder
                       v-model="password"
                       v-show="showPass"
                     >

@@ -56,13 +56,19 @@
   </div>
 </template>
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
       title: null,
       myHTML: null,
       CatValueId: "Select a category",
-      errors: null
+      errors: null,
+      editor: ClassicEditor,
+      editorData: "<p>Rich-text editor content.</p>",
+      editorConfig: {
+        // The configuration of the rich-text editor.
+      }
     };
   },
   mounted() {

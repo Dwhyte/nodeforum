@@ -18,6 +18,7 @@ import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 import CxltToastr from 'cxlt-vue2-toastr'
 import wysiwyg from "vue-wysiwyg";
 import "vue-wysiwyg/dist/vueWysiwyg.css";
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 
 
@@ -126,6 +127,7 @@ Vue.use(CxltToastr, toastrConfigs);
 Vue.use(wysiwyg, {
   maxHeight: "1000px"
 })
+Vue.use(CKEditor);
 
 
 /* eslint-disable no-new */
