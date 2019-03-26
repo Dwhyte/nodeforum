@@ -39,6 +39,17 @@
             </form>
           </div>
           <wysiwyg v-model="myHTML"/>
+          <div class="save-area">
+            <a
+              @click="createNewPost"
+              class="btn btn-sm btn-outline-save font-weight-bold mt-3"
+            >Create New Thread</a>
+            <a
+              @click="clearEditPost"
+              style="float: right;"
+              class="btn btn-sm btn-danger-outline font-weight-bold mt-3"
+            >Clear</a>
+          </div>
         </div>
       </div>
     </div>
@@ -50,7 +61,8 @@ export default {
     return {
       title: null,
       myHTML: null,
-      CatValueId: "Select a category"
+      CatValueId: "Select a category",
+      errors: null
     };
   },
   mounted() {
@@ -67,12 +79,33 @@ export default {
     }
   },
   methods: {
-    createNewPost() {},
     getCats() {
       this.$store.dispatch("GetCategoryNames");
     },
     onChange(event) {
       console.log(event.target.value);
+    },
+    createNewPost() {
+      this.axios
+        .post("/api/v1/threads", {
+          name: this.title,
+          content: this.myHTML,
+          categoryId: this.CatValueId
+        })
+        .then(res => {
+          console.log(res.data);
+          this.title = null;
+          this.CatValueId = "Select a category";
+          this.myHTML = null;
+        })
+        .catch(error => {
+          this.error = error.response.data;
+        });
+    },
+    clearEditPost() {
+      this.title = null;
+      this.CatValueId = "Select a category";
+      this.myHTML = null;
     }
   }
 };
@@ -87,5 +120,13 @@ export default {
   padding-bottom: 0.3em;
   border: none !important;
   border-bottom: solid 2px #536eec !important;
+}
+
+#newpost .save-area .btn-outline-save:hover {
+  color: #ffffff;
+}
+
+#newpost .save-area .btn-danger-outline:hover {
+  color: #ffffff;
 }
 </style>

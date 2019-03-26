@@ -16,15 +16,26 @@
             >{{ thread.name | truncate(50) }}</router-link>
             <div class="thread-meta">
               <div>
-                <span class="display-name">By {{ thread.user.username }}</span>
-                <span class="display-category">In {{ thread.category.value }}</span>
+                <span class="display-name">
+                  By
+                  <router-link
+                    class="font-weight-bold"
+                    :to="`/u/${thread.user.username}`"
+                  >{{ thread.user.username }}</router-link>
+                </span>
+                <span class="display-category ml-1">
+                  in
+                  <span
+                    v-bind:style="{ 'color': `${thread.category.color}` }"
+                  >{{ thread.category.value }}</span>
+                </span>
                 <span class="display-date">
                   · {{ thread.createdAt | moment("MMMM Do") }}
                   <small>({{ thread.createdAt | moment("from", "now") }})</small>
                 </span>
               </div>
             </div>
-            <div class="small mt-2">{{ thread.content | truncate(200) }}</div>
+            <div class="small mt-2">{{ thread.content.replace(/<[^>]+>/g, '') | truncate(200) }}</div>
           </div>
         </li>
       </ul>

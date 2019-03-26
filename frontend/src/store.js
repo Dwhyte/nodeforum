@@ -145,7 +145,7 @@ export default new Vuex.Store({
       .then(() => {
         // router.push('/login');
         router.push({
-        name: 'login',
+        name: 'Login',
       });
       })
       .catch(error => {
