@@ -4,6 +4,7 @@
 
 import Vue from 'vue'
 // import Vuex from 'vuex'
+import NProgress from 'nprogress'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App'
@@ -51,6 +52,7 @@ if (localStorage.jwtToken) {
 
 
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   // check if the route requires authentication and user is not logged in
   if (to.matched.some(route => route.meta.requiresAuth) && !store.state.isAuthenticated) {
     // redirect to login page
@@ -107,6 +109,10 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+
+router.afterEach(() => {
+  NProgress.done()
+})
 
 var toastrConfigs = {
   position: 'top right',

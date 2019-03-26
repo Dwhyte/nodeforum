@@ -20,7 +20,7 @@ export default {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Node Forum",
     // all titles will be injected into this template
-    titleTemplate: "%s | My Awesome Webapp"
+    titleTemplate: "%s | Welcom To My Awesome Forum"
   }
 };
 </script>
@@ -28,3 +28,8 @@ export default {
 <style>
 @import "main.css";
 </style>
+<style lang="scss">
+@import "../src/assets/variables.scss";
+@import "../src/assets/nprogress.scss";
+</style>
+
