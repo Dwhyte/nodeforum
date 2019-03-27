@@ -8,8 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^12.0.0",
-    "@ckeditor/ckeditor5-vue": "^1.0.0-beta.1",
     "axios": "^0.18.0",
     "cxlt-vue2-toastr": "^1.1.0",
     "filereader": "^0.10.3",
@@ -18,12 +16,15 @@
     "vue": "^2.6.6",
     "vue-axios": "^2.1.4",
     "vue-body-class": "^2.0.0-beta.2",
+    "vue-content-loader": "^0.2.1",
+    "vue-flash-message": "^0.7.2",
     "vue-meta": "^1.5.8",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
     "vue-truncate": "^1.0.0",
     "vue-truncate-filter": "^1.1.7",
     "vue-wysiwyg": "^1.7.2",
+    "vue2-animate": "^2.1.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {

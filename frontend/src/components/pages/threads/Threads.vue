@@ -1,14 +1,26 @@
 <template>
   <div id="threads-section" class="col-lg-11 ml-auto mr-auto">
     <div class="mb-4">
-      <div class="loading text-center" v-if="loading">Loading...</div>
-      <ul
-        v-else
-        class="list-unstyled"
-        v-for="thread in threads.Threads || threads.threads"
-        :key="thread.id"
+      <!-- <div class="loading text-center" v-if="loading">Loading...</div> -->
+      <content-loader
+        v-if="!Data.threads"
+        :height="160"
+        :width="300"
+        :speed="2"
+        primaryColor="#f3f3f3"
+        secondaryColor="#ecebeb"
       >
-        <li class="threadblock-norm thread mb-4">
+        <circle cx="10" cy="20" r="8"/>
+        <rect x="25" y="15" rx="5" ry="5" width="220" height="10"/>
+        <circle cx="10" cy="50" r="8"/>
+        <rect x="25" y="45" rx="5" ry="5" width="220" height="10"/>
+        <circle cx="10" cy="80" r="8"/>
+        <rect x="25" y="75" rx="5" ry="5" width="220" height="10"/>
+        <circle cx="10" cy="110" r="8"/>
+        <rect x="25" y="105" rx="5" ry="5" width="220" height="10"/>
+      </content-loader>
+      <ul v-else class="list-unstyled">
+        <li class="threadblock-norm thread mb-4" v-for="thread in Data.threads" :key="thread.id">
           <div class="thread-title">
             <router-link :to="`/u/${thread.user.username}`">
               <img
@@ -55,14 +67,20 @@
           </div>
         </li>
       </ul>
-      <div v-if="threads === 'Threads does not exists for this category'">
+      <div v-if="Data.threads === 'Threads does not exists for this category'">
         <h4 class="text-center">No Threads</h4>
       </div>
     </div>
   </div>
 </template>
 <script>
+// import ThreadDisplayPlaceholder from "./ThreadDisplayPlaceholder";
+import { ContentLoader } from "vue-content-loader";
+
 export default {
+  components: {
+    ContentLoader
+  },
   data() {
     return {};
   },
@@ -73,7 +91,7 @@ export default {
     $route: "getThreads"
   },
   computed: {
-    threads() {
+    Data() {
       return !this.$store.getters.getThreads
         ? false
         : this.$store.getters.getThreads;

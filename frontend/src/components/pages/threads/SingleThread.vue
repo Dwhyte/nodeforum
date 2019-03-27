@@ -1,8 +1,17 @@
 <template>
-  <div>
-    <div class="loading" v-if="loading">Loading...</div>
-    <div v-if="data.thread">
-      <h1>{{ data.thread.name }}</h1>
+  <div id="singleThread">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+          <div class="loading" v-if="loading">Loading...</div>
+          <div class="thread-container">
+            <div v-if="data.thread">
+              <h1>{{ data.thread.name }}</h1>
+              <div v-html="data.thread.content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,3 +46,15 @@ export default {
   }
 };
 </script>
+<style>
+#singleThread .thread-container {
+  background: #fff;
+  padding: 4rem 4.75rem;
+  border-radius: 4px;
+  border: 1px solid #eef0f1;
+}
+
+#singleThread .thread-container img {
+  width: 100%;
+}
+</style>

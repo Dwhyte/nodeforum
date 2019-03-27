@@ -19,7 +19,8 @@ import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 import CxltToastr from 'cxlt-vue2-toastr'
 import wysiwyg from "vue-wysiwyg";
 import "vue-wysiwyg/dist/vueWysiwyg.css";
-import CKEditor from '@ckeditor/ckeditor5-vue';
+import VueFlashMessage from 'vue-flash-message';
+require('vue-flash-message/dist/vue-flash-message.min.css');
 
 
 
@@ -133,7 +134,7 @@ Vue.use(CxltToastr, toastrConfigs);
 Vue.use(wysiwyg, {
   maxHeight: "1000px"
 })
-Vue.use(CKEditor);
+Vue.use(VueFlashMessage);
 
 
 /* eslint-disable no-new */

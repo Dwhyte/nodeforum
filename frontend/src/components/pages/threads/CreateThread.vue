@@ -1,6 +1,8 @@
 <template>
   <div id="newpost">
+    <flash-message class="flashpool"></flash-message>
     <div class="container">
+      <!-- <flash-message></flash-message> -->
       <div class="row">
         <div class="col-lg-12">
           <h1 class="header mb-4">
@@ -27,6 +29,11 @@
                 </div>
                 <div class="col-sm-3 my-1">
                   <label class="sr-only" for="inlineFormInputName">Thread Title</label>
+                  <div
+                    v-if="errors"
+                    :style="{display: errors.password ? 'display' : 'block'}"
+                    class="invalid-feedback"
+                  >{{ errors.name }}</div>
                   <input
                     type="text"
                     class="form-control"
@@ -34,6 +41,12 @@
                     placeholder="Thread title"
                     v-model="title"
                   >
+                </div>
+                <div class="col-sm-3 my-1">
+                  <label for="addfeaturedImage" class="mt-2">
+                    <a class="btn btn-sm btn-outline-claim font-weight-bold">Upload Featured Image</a>
+                  </label>
+                  <input type="file" hidden class="form-control-file" id="addfeaturedImage">
                 </div>
               </div>
             </form>
@@ -56,19 +69,13 @@
   </div>
 </template>
 <script>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   data() {
     return {
       title: null,
       myHTML: null,
       CatValueId: "Select a category",
-      errors: null,
-      editor: ClassicEditor,
-      editorData: "<p>Rich-text editor content.</p>",
-      editorConfig: {
-        // The configuration of the rich-text editor.
-      }
+      errors: null
     };
   },
   mounted() {
@@ -99,13 +106,15 @@ export default {
           categoryId: this.CatValueId
         })
         .then(res => {
+          // this.flashSuccess(res.data.message);
+          this.flash(res.data.message, "info flash__message");
           console.log(res.data);
           this.title = null;
           this.CatValueId = "Select a category";
           this.myHTML = null;
         })
         .catch(error => {
-          this.error = error.response.data;
+          this.errors = error.response.data;
         });
     },
     clearEditPost() {

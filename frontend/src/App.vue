@@ -2,6 +2,9 @@
   <div id="app">
     <app-navbar/>
     <main role="main">
+      <!-- <transition name="slide" mode="out-in">
+        <router-view/>
+      </transition>-->
       <router-view/>
     </main>
   </div>
@@ -26,10 +29,13 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css?family=Oxygen");
 @import "main.css";
 </style>
 <style lang="scss">
 @import "../src/assets/variables.scss";
 @import "../src/assets/nprogress.scss";
+$animationDuration: 0.5s; // specify animation duration. Default value: 1s
+@import "../node_modules/vue2-animate/src/sass/vue2-animate.scss";
 </style>
 

@@ -15,7 +15,7 @@ export default new Vuex.Store({
     currentUser: {},
     loginErrors: {},
     registerErrors: {},
-    threads: {},
+    threadData: {},
     thread: {},
     categories: {},
     profile: {},
@@ -43,7 +43,7 @@ export default new Vuex.Store({
       state.registerErrors = errorData
     },
     setThreads(state, threads){
-      state.threads = threads
+      state.threadData = threads
       state.isLoading = false
     },
     setSingleThread(state, thread) {
@@ -80,7 +80,7 @@ export default new Vuex.Store({
       return state.registerErrors
     },
     getThreads(state) {
-      return state.threads
+      return state.threadData
     },
     getSingleThread(state) {
       return state.thread

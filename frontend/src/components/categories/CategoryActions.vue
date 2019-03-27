@@ -60,6 +60,15 @@ export default {
     right: 0;
     height: 100%;
   }
+
+  .cat-box {
+    margin-top: 82px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
 }
 
 .thread-sticky-side-menu {
