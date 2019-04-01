@@ -4,7 +4,7 @@
       class="navbar navbar-expand-md navbar-dark forum-nav fixed-top"
       :class="{ 'forum-nav-hide': $route.path == '/login' || $route.path == '/register'}"
     >
-      <router-link to="/">
+      <router-link to="/category/all">
         <a class="navbar-brand">Node Forum</a>
       </router-link>
       <button
@@ -32,9 +32,9 @@
               v-if="isAuth"
               to="/thread/new"
               class="btn btn-sm btn-outline-claim font-weight-bold text-uppercase mr-5"
-              style="height: 32px;margin-top: 10px;"
+              style="height: 32px;margin-top: 6px;"
             >Write A Post</router-link>
-            <li v-if="isAuth" style="height: 32px;margin-top: 14px;">
+            <li v-if="isAuth" style="height: 32px;margin-top: 10px;">
               <span class="name font-weight-bold">Hello, {{ currentUser.username }}</span>
             </li>
             <li v-if="isAuth" class="nav-item dropdown">

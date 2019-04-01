@@ -111,19 +111,51 @@
         </div>
       </div>
     </div>
-    <div id="library" class="mb-3"></div>
+    <div id="library" class="mb-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="lib-btns mb-3">
+              <a
+                @click="islibraryShow = !islibraryShow"
+                class="btn btn-link btn-sm text-uppercase font-weight-bold"
+                :class="{ 'active': islibraryShow }"
+              >Threads</a>
+            </div>
+            <div class="lib-btns">
+              <a
+                @click="islibraryShow = !islibraryShow"
+                class="btn btn-link btn-sm text-uppercase font-weight-bold"
+                :class="{ 'active': !islibraryShow }"
+              >Posts</a>
+            </div>
+          </div>
+          <div class="col-lg-10">
+            <UserThreads v-show="islibraryShow" :threads="Profile.user.threads"/>
+            <UserPosts v-show="!islibraryShow" :posts="Profile.user.posts"/>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import UserThreads from "./ProfileThreads";
+import UserPosts from "./ProfilePosts";
 export default {
   metaInfo() {
     return {
       titleTemplate: `%s - ${this.routeName.toUpperCase()}`
     };
   },
+  components: {
+    UserThreads,
+    UserPosts
+  },
   data() {
     return {
       routeName: this.$route.params.username,
+      islibraryShow: true,
       isEdit: false,
       image: null,
       cover: null,
@@ -528,5 +560,21 @@ span.edit:hover {
   cursor: pointer;
   -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
   animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+#profile .lib-btns .btn {
+  width: 100%;
+}
+
+#profile .lib-btns .btn:hover {
+  color: #fff;
+  background-color: #536eec;
+  border-color: #536eec;
+}
+
+#profile .lib-btns .btn.active {
+  color: #fff;
+  background-color: #536eec;
+  border-color: #536eec;
 }
 </style>

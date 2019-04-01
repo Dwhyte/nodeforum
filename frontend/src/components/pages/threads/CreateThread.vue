@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-sm-3 my-1">
                   <label for="addfeaturedImage" class="mt-2">
-                    <a class="btn btn-sm btn-outline-claim font-weight-bold">Upload Featured Image</a>
+                    <a class="btn btn-sm btn-outline-claim font-weight-bold">Add Featured Image</a>
                   </label>
                   <input type="file" hidden class="form-control-file" id="addfeaturedImage">
                 </div>

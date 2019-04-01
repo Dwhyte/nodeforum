@@ -67,16 +67,17 @@ try {
     resThreads = {
       name: 'All',
       value: 'ALL',
-      Threads: threads
+      threads: threads
     }
 
     threadsLatestPost = {
-      Threads: threadsLatestPost
+      threads: threadsLatestPost
     }
   } else {
     resThreads = threads.toJSON()
   }
     res.json(resThreads);
+    // console.log(resThreads);
 
   } catch (error) {
     res.json(error);

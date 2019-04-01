@@ -4,18 +4,19 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     // logic for transforming into the new state
     return queryInterface.addColumn(
-      'threads', 
-      'content', 
+      'threads',
+      'featured_image',
       Sequelize.TEXT, {
-        after: 'name'
-      })
+        before: 'content'
+      }
+    )
   },
 
   down: (queryInterface, Sequelize) => {
     // logic for reverting the changes
     return queryInterface.removeColumn(
       'threads',
-      'content'
-    );
+      'featured_image'
+    )
   }
 };

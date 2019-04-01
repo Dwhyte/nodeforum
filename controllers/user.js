@@ -3,8 +3,10 @@ const multer = require('multer');
 const cloudinary = require('cloudinary');
 const cloudinaryStorage = require('multer-storage-cloudinary');
 
-// load user model
+// load model
 const User = require('../models/user-model');
+const Thread = require('../models/thread-model');
+const Post = require('../models/post-model');
 
 
 // set cloudinary api settings
@@ -29,6 +31,8 @@ const avatarStorage = cloudinaryStorage({
 });
 
 
+
+
 const coverStorage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: process.env.CLOUD_COVER_FOLDER_NAME,
@@ -43,8 +47,8 @@ const coverStorage = cloudinaryStorage({
 
 const avatarParser = multer({
   storage: avatarStorage,
-  limits: { // file size set to 200kb
-    fileSize: 1 * 200 * 200
+  limits: { // file size set to 750kb
+    fileSize: 1 * 750 * 750
   }
 });
 
@@ -75,7 +79,20 @@ exports.getUser = async (req, res, next) => {
     let user = await User.findOne({
       where: {
         username: req.params.username
-      }
+      },
+      include: [
+        {
+          model: Thread, attributes: ['slug', 'name', 'featured_image', 'userId'], include:[
+            {
+              model: User,
+              attributes: ['username']
+            },
+          ]
+        },
+        {
+          model: Post, attributes: ['userId', 'replyingToUsername', 'content']
+        }
+      ]
     });
 
     if(!user) {
@@ -101,12 +118,12 @@ exports.getUser = async (req, res, next) => {
 exports.updateUserAvatar = async (req, res, next) => {
   try {
     console.log(req.file) // see what is in file upload
-    const image = {};
-    image.url = req.file.url;
-    image.secure_url = req.file.secure_url;
-    image.public_id = req.file.public_id;
-    image.version = req.file.version;
-    image.originalname = req.file.originalname;
+    // const image = {};
+    // image.url = req.file.url;
+    // image.secure_url = req.file.secure_url;
+    // image.public_id = req.file.public_id;
+    // image.version = req.file.version;
+    // image.originalname = req.file.originalname;
 
 
    let user = await User.findByPk(req.user.id);
@@ -115,7 +132,9 @@ exports.updateUserAvatar = async (req, res, next) => {
      res.status(400).json({message: 'User not found'});
      return;
    }else{
-     await user.update({ avatar: image.secure_url });
+     await user.update({
+       avatar: req.file.secure_url
+     });
      user.email = undefined;
      user.encryptedPassword = undefined;
      res.json(user.toJSON());

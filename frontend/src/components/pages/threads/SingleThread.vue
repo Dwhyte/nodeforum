@@ -7,7 +7,7 @@
           <div class="thread-container">
             <div v-if="data.thread">
               <h1>{{ data.thread.name }}</h1>
-              <div v-html="data.thread.content"></div>
+              <div v-cloak v-html="data.thread.content"></div>
             </div>
           </div>
         </div>
@@ -22,7 +22,10 @@ export default {
       routeSlug: this.$route.params.slug
     };
   },
-  mounted() {
+  // beforeRouteEnter(to, from, next) {
+  //   this.getSingleThread();
+  // },
+  created() {
     this.getSingleThread();
   },
   watch: {
@@ -56,5 +59,18 @@ export default {
 
 #singleThread .thread-container img {
   width: 100%;
+}
+
+[v-cloak] > * { display:none; }
+[v-cloak]::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-image: url('~@/assets/spinner.gif');
+  background-size: cover;
+  left: 50%;
+  top: 50%;
 }
 </style>
