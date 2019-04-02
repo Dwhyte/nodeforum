@@ -7,6 +7,8 @@ const router = express.Router();
 // api/u/:username => GET
 router.get('/:username', UserController.getUser);
 
+router.get('/threads/:userId', UserController.getUserThreads);
+
 
 // // api/u/update => POST
 // router.post('/update', passport.authenticate('jwt', {

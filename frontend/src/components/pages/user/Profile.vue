@@ -141,6 +141,7 @@
                 v-if="!islibraryShow"
               >Posts</a>
             </div>
+            <Pagination/>
           </div>
           <div class="col-lg-10">
             <UserThreads
@@ -154,6 +155,7 @@
               :user="Profile.user.username"
             />
           </div>
+          <!-- <router-link :to="{ query: { threads: '1' }}">Next</router-link> -->
         </div>
       </div>
     </div>
@@ -162,6 +164,7 @@
 <script>
 import UserThreads from "./ProfileThreads";
 import UserPosts from "./ProfilePosts";
+import Pagination from "../pagination/pagination";
 export default {
   metaInfo() {
     return {
@@ -170,7 +173,8 @@ export default {
   },
   components: {
     UserThreads,
-    UserPosts
+    UserPosts,
+    Pagination
   },
   data() {
     return {
@@ -188,6 +192,7 @@ export default {
   },
   mounted() {
     this.getUser();
+    this.getUserThreads();
   },
   watch: {
     $route: "getUser"
@@ -202,6 +207,11 @@ export default {
       return !this.$store.getters.getSingleProfile
         ? false
         : this.$store.getters.getSingleProfile;
+    },
+    userThreads() {
+      return !this.$store.getters.getUserThreads
+        ? false
+        : this.$store.getters.getUserThreads;
     }
   },
   methods: {
@@ -211,6 +221,10 @@ export default {
 
     getCurrentAuthUser() {
       this.$store.dispatch("getCurrentUser");
+    },
+
+    getUserThreads() {
+      this.$store.dispatch("GetUserThreads");
     },
 
     onImageChange(e) {
@@ -433,7 +447,8 @@ export default {
 
 .profilePage-editingOverlay {
   background-color: #253446;
-  bottom: 0;
+  /* bottom: 0; */
+  bottom: -1000px;
   display: block;
   left: 0;
   opacity: 0.8;
@@ -596,6 +611,19 @@ span.edit:hover {
   color: #fff;
   background-color: #536eec;
   border-color: #536eec;
+}
+
+#profile .library-nav {
+  text-align: center;
+}
+
+#profile .library-nav i {
+  font-size: 47px;
+}
+
+#profile .library-nav i:hover {
+  color: #536eec;
+  cursor: pointer;
 }
 
 @media (min-width: 992px) {

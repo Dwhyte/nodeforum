@@ -19,6 +19,7 @@ export default new Vuex.Store({
     thread: {},
     categories: {},
     profile: {},
+    userThreads: {},
     errors: {}
   },
   mutations: {
@@ -48,6 +49,10 @@ export default new Vuex.Store({
     },
     setSingleThread(state, thread) {
       state.thread = thread
+      state.isLoading = false
+    },
+    setUserThreads(state, userthreads) {
+      state.userThreads = userthreads
       state.isLoading = false
     },
     setCatNames(state, cats) {
@@ -84,6 +89,9 @@ export default new Vuex.Store({
     },
     getSingleThread(state) {
       return state.thread
+    },
+    getUserThreads(state) {
+      return state.userThreads
     },
     getCategoryNames(state) {
       return state.categories
@@ -207,6 +215,20 @@ export default new Vuex.Store({
 
      } catch (error) {
         commit('setThreads', {})
+     }
+    },
+
+
+  // Get User Threads by userId
+   async GetUserThreads({commit}, userId) {
+     try {
+       commit('setLoader', true);
+       const response = await axios.get(`/api/v1/u/threads/1`);
+       commit('setUserThreads', response.data);
+      //  commit('setLoader', false);
+
+     } catch (error) {
+        commit('setUserThreads', {})
      }
     },
 

@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
+const sequelizePaginate = require('sequelize-paginate')
+
 
 const ThreadModel = sequelize.define('thread', {
   id: {
@@ -30,5 +32,5 @@ const ThreadModel = sequelize.define('thread', {
     defaultValue: false
   }
 });
-
+sequelizePaginate.paginate(ThreadModel);
 module.exports = ThreadModel;

@@ -38,6 +38,7 @@
     "randomcolor": "^0.5.4",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0",
+    "sequelize-paginate": "^1.1.5",
     "serve-favicon": "^2.5.0",
     "url-slug": "^2.0.0",
     "validator": "^10.11.0"

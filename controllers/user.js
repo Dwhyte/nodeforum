@@ -79,18 +79,20 @@ exports.getUser = async (req, res, next) => {
   try {
     // const { pageNum } = req.body;
     // const pageNum = 1;
-    const paginate = ({ page, pageSize }) => {
-    const offset = page * pageSize;
-    const limit = offset + pageSize;
+  //   const paginate = ({ page, pageSize }) => {
+  //   const offset = page * pageSize;
+  //   const limit = offset + pageSize;
 
-    return {
-        offset,
-        limit
-    };
-  };
+  //   return {
+  //       offset,
+  //       limit
+  //   };
+  // };
 
-  let page = 0;
-  let pageSize = 6;
+  // let page = 0;
+  // let pageSize = 6;
+
+    const { docs, pages, total } = await Thread.paginate();
 
     let user = await User.findOne({
       where: {
@@ -99,9 +101,9 @@ exports.getUser = async (req, res, next) => {
       include: [
         {
           model: Thread,
-          // offset: 0, limit: 5,
+          offset: 0, limit: 6,
           // offset: page, limit: pageSize,
-          ...paginate({page, pageSize}),
+          // ...paginate({page, pageSize}),
           order: [
               ['id', 'DESC']
             ], 
@@ -135,14 +137,59 @@ exports.getUser = async (req, res, next) => {
       return res.status(400).json({userNotFound: 'User Not Found'});
     } else {
       user.encryptedPassword = undefined;
-      paginate({page, pageSize});
+      // paginate({page, pageSize});
       return res.json({
         success: true,
         user,
-        page,
-        pageSize
+        // page,
+        // pageSize,
+        docs, pages, total
       })
     }
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
+exports.getUserThreads = async (req, res, next) => {
+  try {
+    // threads = await Thread.findAndCountAll({
+    //   where: {
+    //     userId: req.params.userId
+    //   },
+    // })
+
+  const { docs, pages, total } = await Thread.paginate({
+    where: {
+      userId: req.params.userId
+    },
+    page: 1,
+    paginate: 6,
+    include: [
+     {
+      model: User,
+      attributes: ['username', 'id', 'avatar']
+     },
+     {
+      model: Post, attributes: ['userId', 'replyingToUsername', 'content'],
+      order: [
+        ['id', 'DESC']
+      ],
+      limit: 1,
+     },
+     {
+      model: Category,
+      attributes: ['id', 'name', 'value', 'color']
+     },
+    ]
+  })
+
+    res.json({
+      docs, pages, total
+    })
 
   } catch (error) {
     next(error);
