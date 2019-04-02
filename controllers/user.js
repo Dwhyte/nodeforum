@@ -7,6 +7,7 @@ const cloudinaryStorage = require('multer-storage-cloudinary');
 const User = require('../models/user-model');
 const Thread = require('../models/thread-model');
 const Post = require('../models/post-model');
+const Category = require('../models/category-model');
 
 
 // set cloudinary api settings
@@ -76,30 +77,71 @@ exports.upload = {
 // (public route)
 exports.getUser = async (req, res, next) => {
   try {
+    // const { pageNum } = req.body;
+    // const pageNum = 1;
+    const paginate = ({ page, pageSize }) => {
+    const offset = page * pageSize;
+    const limit = offset + pageSize;
+
+    return {
+        offset,
+        limit
+    };
+  };
+
+  let page = 0;
+  let pageSize = 6;
+
     let user = await User.findOne({
       where: {
         username: req.params.username
       },
       include: [
         {
-          model: Thread, attributes: ['slug', 'name', 'featured_image', 'userId'], include:[
+          model: Thread,
+          // offset: 0, limit: 5,
+          // offset: page, limit: pageSize,
+          ...paginate({page, pageSize}),
+          order: [
+              ['id', 'DESC']
+            ], 
+            include: [
             {
               model: User,
               attributes: ['username']
             },
+            {
+              model: Category,
+              attributes: ['id', 'name', 'value', 'color']
+            },
+            {
+              model: Post, attributes: ['userId', 'replyingToUsername', 'content'],
+              order: [
+                ['id', 'DESC']
+              ], 
+              include:[
+               {
+                 model: User, 
+                 attributes: ['username', 'id', 'avatar']
+               } 
+              ]
+            }
           ]
         },
-        {
-          model: Post, attributes: ['userId', 'replyingToUsername', 'content']
-        }
-      ]
+      ],
     });
 
     if(!user) {
       return res.status(400).json({userNotFound: 'User Not Found'});
     } else {
       user.encryptedPassword = undefined;
-      return res.json({success: true, user })
+      paginate({page, pageSize});
+      return res.json({
+        success: true,
+        user,
+        page,
+        pageSize
+      })
     }
 
   } catch (error) {

@@ -114,12 +114,18 @@
     <div id="library" class="mb-3">
       <div class="container">
         <div class="row">
-          <div class="col-lg-2">
+          <div class="col-lg-2 cat-box">
             <div class="lib-btns mb-3">
               <a
                 @click="islibraryShow = !islibraryShow"
                 class="btn btn-link btn-sm text-uppercase font-weight-bold"
                 :class="{ 'active': islibraryShow }"
+                v-if="!islibraryShow"
+              >Threads</a>
+              <a
+                class="btn btn-link btn-sm text-uppercase font-weight-bold"
+                :class="{ 'active': islibraryShow }"
+                v-if="islibraryShow"
               >Threads</a>
             </div>
             <div class="lib-btns">
@@ -127,12 +133,26 @@
                 @click="islibraryShow = !islibraryShow"
                 class="btn btn-link btn-sm text-uppercase font-weight-bold"
                 :class="{ 'active': !islibraryShow }"
+                v-if="islibraryShow"
+              >Posts</a>
+              <a
+                class="btn btn-link btn-sm text-uppercase font-weight-bold"
+                :class="{ 'active': !islibraryShow }"
+                v-if="!islibraryShow"
               >Posts</a>
             </div>
           </div>
           <div class="col-lg-10">
-            <UserThreads v-show="islibraryShow" :threads="Profile.user.threads"/>
-            <UserPosts v-show="!islibraryShow" :posts="Profile.user.posts"/>
+            <UserThreads
+              v-show="islibraryShow"
+              :threads="Profile.user.threads"
+              :user="Profile.user.username"
+            />
+            <UserPosts
+              v-show="!islibraryShow"
+              :posts="Profile.user.posts"
+              :user="Profile.user.username"
+            />
           </div>
         </div>
       </div>
@@ -576,5 +596,16 @@ span.edit:hover {
   color: #fff;
   background-color: #536eec;
   border-color: #536eec;
+}
+
+@media (min-width: 992px) {
+  .cat-box {
+    margin-top: 82px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
 }
 </style>

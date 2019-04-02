@@ -3,7 +3,7 @@
     <div class="mb-4">
       <!-- <div class="loading text-center" v-if="loading">Loading...</div> -->
       <content-loader
-        v-if="!Data.threads"
+        v-if="!threads"
         :height="160"
         :width="300"
         :speed="2"
@@ -20,7 +20,7 @@
         <rect x="25" y="105" rx="5" ry="5" width="220" height="10"/>
       </content-loader>
       <ul v-else class="list-unstyled">
-        <li class="threadblock-norm thread mb-4" v-for="thread in Data.threads" :key="thread.id">
+        <li class="threadblock-norm thread mb-4" v-for="(thread, index) in threads" :key="index">
           <div class="thread-title">
             <router-link :to="`/u/${thread.user.username}`">
               <img
@@ -67,7 +67,7 @@
           </div>
         </li>
       </ul>
-      <div v-if="Data.threads === 'Threads does not exists for this category'">
+      <div v-if="threads === 'Threads does not exists for this category'">
         <h4 class="text-center">No Threads</h4>
       </div>
     </div>
@@ -81,31 +81,6 @@ export default {
   props: ["threads"],
   components: {
     ContentLoader
-  },
-  data() {
-    return {};
-  },
-  mounted() {
-    this.getThreads();
-  },
-  watch: {
-    $route: "getThreads"
-  },
-  computed: {
-    Data() {
-      return !this.$store.getters.getThreads
-        ? false
-        : this.$store.getters.getThreads;
-    },
-    loading() {
-      return this.$store.state.isLoading;
-    }
-  },
-  methods: {
-    getThreads() {
-      let catSlug = this.$route.params.category.toUpperCase();
-      this.$store.dispatch("GetThreads", catSlug);
-    }
   }
 };
 </script>

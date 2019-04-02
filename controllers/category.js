@@ -38,6 +38,7 @@ try {
   if (req.params.category === 'ALL') {
     threads = await Thread.findAll(threadInclude('ASC')[0]);
     threadsLatestPost = await Thread.findAll(threadInclude('DESC')[0]);
+        // // Default page = 1 and paginate = 25
   } else {
     threads = await Category.findOne({
       where: {
