@@ -37,7 +37,7 @@
     "passport-local": "^1.0.0",
     "randomcolor": "^0.5.4",
     "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0",
+    "sequelize-cli": "^5.5.0",
     "sequelize-paginate": "^1.1.5",
     "serve-favicon": "^2.5.0",
     "url-slug": "^2.0.0",
